@@ -42,6 +42,7 @@ public class SignUpPassword extends AppCompatActivity {
     String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.EnterPassword);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_password);
         password_entry = findViewById(R.id.sign_up_password_password_entry);

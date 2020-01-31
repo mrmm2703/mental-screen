@@ -40,6 +40,7 @@ public class EnterEmail extends AppCompatActivity {
     Intent myIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.EnterEmail);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_email);
         school_id = getIntent().getStringExtra("id");

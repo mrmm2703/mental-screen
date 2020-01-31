@@ -13,14 +13,27 @@
         android:orientation="vertical"
         tools:context=".SignUpClass">
 
-        <TextView
-            android:id="@+id/textView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="100dp"
-            android:text="Ah, how about..."
-            android:textSize="40sp" />
+            android:background="@color/grey"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="60dp"
+                android:fontFamily="@font/fredoka_one"
+                android:maxLines="1"
+                android:text="NEARLY THERE!"
+                android:textColor="@color/white"
+                app:autoSizeMinTextSize="35sp"
+                app:autoSizeTextType="uniform" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView2"
@@ -28,8 +41,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginTop="30dp"
+            android:layout_marginEnd="50dp"
+            android:fontFamily="@font/fredoka_one"
             android:text="Enter your year group:"
-            android:textSize="15sp" />
+            android:textColor="@color/grey"
+            android:textSize="17sp" />
 
         <EditText
             android:id="@+id/sign_up_class_year"
@@ -37,18 +53,23 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
+            android:fontFamily="@font/fredoka_one"
+            android:backgroundTint="@color/grey"
             android:ems="10"
             android:inputType="number"
-            android:textSize="15sp" />
+            android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginTop="30dp"
+            android:layout_marginEnd="50dp"
+            android:fontFamily="@font/fredoka_one"
             android:text="Choose your class:"
-            android:textSize="15sp" />
+            android:textColor="@color/grey"
+            android:textSize="17sp" />
 
         <Spinner
             android:id="@+id/sign_up_class_spinner"
@@ -56,6 +77,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
+            android:backgroundTint="@color/grey"
+            android:foregroundTint="@color/grey"
             android:scrollbarSize="4dp" />
 
     </LinearLayout>
@@ -72,6 +95,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
         android:clickable="true"
+        android:backgroundTint="@color/grey"
         android:onClick="fab_click"
         android:src="@drawable/naviagate_next" />
 </RelativeLayout>
