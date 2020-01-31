@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Mental Screen</string>
+    <string name="domain">http://192.168.1.148/</string>
+</resources>
