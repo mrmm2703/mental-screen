@@ -32,6 +32,9 @@
         <activity android:name=".SignUpPassword">
 
         </activity>
+        <activity android:name=".LandingHome">
+
+        </activity>
     </application>
 
 </manifest>

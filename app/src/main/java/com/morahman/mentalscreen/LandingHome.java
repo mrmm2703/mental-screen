@@ -20,6 +20,5 @@ public class LandingHome extends AppCompatActivity {
         if (id == null) {
             LandingHome.this.startActivity(new Intent(LandingHome.this, EnterSchool.class));
         }
-        Snackbar.make
     }
 }
