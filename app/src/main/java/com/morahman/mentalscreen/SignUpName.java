@@ -17,6 +17,7 @@ public class SignUpName extends AppCompatActivity {
     EditText last_name_entry;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.SignUpName);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_name);
         school_name = getIntent().getStringExtra("school_name");

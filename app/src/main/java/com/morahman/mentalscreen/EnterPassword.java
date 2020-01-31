@@ -38,6 +38,7 @@ public class EnterPassword extends AppCompatActivity {
     JSONArray json;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.EnterPassword);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_password);
         school_id = getIntent().getStringExtra("school_id");
