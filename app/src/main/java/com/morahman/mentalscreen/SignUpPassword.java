@@ -44,6 +44,7 @@ public class SignUpPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.EnterPassword);
         super.onCreate(savedInstanceState);
+        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_sign_up_password);
         password_entry = findViewById(R.id.sign_up_password_password_entry);
         school_name = getIntent().getStringExtra("school_name");
@@ -157,6 +158,12 @@ public class SignUpPassword extends AppCompatActivity {
                     SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("login_id", id);
+                    editor.putString("first_name", first_name);
+                    editor.putString("last_name", last_name);
+                    editor.putString("class", class_);
+                    editor.putString("year", year);
+                    editor.putString("school_name",school_name);
+                    editor.putString("school_id", school_id);
                     editor.apply();
                     Snackbar.make(findViewById(R.id.sign_up_password_relative_layout), "ID: " + id, Snackbar.LENGTH_SHORT).show();
                 } catch (JSONException e) {

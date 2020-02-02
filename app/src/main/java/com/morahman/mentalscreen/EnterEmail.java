@@ -42,8 +42,9 @@ public class EnterEmail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.EnterEmail);
         super.onCreate(savedInstanceState);
+        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_enter_email);
-        school_id = getIntent().getStringExtra("id");
+        school_id = getIntent().getStringExtra("school_id");
         school_name = getIntent().getStringExtra("school_name");
         email_entry = findViewById(R.id.enter_email_email_address);
         Snackbar.make(findViewById(R.id.enter_email_relative_layout), school_name, Snackbar.LENGTH_SHORT).show();
@@ -159,12 +160,14 @@ public class EnterEmail extends AppCompatActivity {
                 }
                 return;
             }
-            String id = "";
             for (int i=0; i < json.length(); i++) {
                 try {
                     JSONObject jsonObject = json.getJSONObject(i);
                     first_name = jsonObject.getString("first_name");
-                    id = jsonObject.getString("id");
+                    String id = jsonObject.getString("id");
+                    String year = jsonObject.getString("year_group");
+                    String class_= jsonObject.getString("class");
+                    Log.d("ENTEREMAIL", "ID: " + id);
                     String last_name = jsonObject.getString("last_name");
                     Snackbar.make(findViewById(R.id.enter_email_relative_layout), "Logged in: " + first_name + " " + last_name, Snackbar.LENGTH_SHORT).show();
                     Intent myIntent = new Intent(EnterEmail.this, EnterPassword.class);
@@ -172,7 +175,10 @@ public class EnterEmail extends AppCompatActivity {
                     myIntent.putExtra("school_name", school_name);
                     myIntent.putExtra("email", email_entry.getText().toString());
                     myIntent.putExtra("first_name", first_name);
+                    myIntent.putExtra("last_name", last_name);
                     myIntent.putExtra("id", id);
+                    myIntent.putExtra("year", year);
+                    myIntent.putExtra("class", class_);
                     EnterEmail.this.startActivity(myIntent);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -137,7 +137,7 @@ public class EnterSchool extends AppCompatActivity {
                 pd.dismiss();
             }
             Intent myIntent = new Intent(EnterSchool.this, EnterEmail.class);
-            myIntent.putExtra("id", id);
+            myIntent.putExtra("school_id", id);
             myIntent.putExtra("school_name", school_name);
             EnterSchool.this.startActivity(myIntent);
         }

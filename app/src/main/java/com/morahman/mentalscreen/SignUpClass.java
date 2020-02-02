@@ -44,7 +44,9 @@ public class SignUpClass extends AppCompatActivity {
     List<String> spinner_choices = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.SignUpClass);
         super.onCreate(savedInstanceState);
+        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_sign_up_class);
         school_name = getIntent().getStringExtra("school_name");
         school_id = getIntent().getStringExtra("school_id");

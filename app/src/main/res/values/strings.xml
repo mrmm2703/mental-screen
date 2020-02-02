@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Mental Screen</string>
     <string name="domain">http://192.168.1.148/</string>
+    <string name="snapchat">com.snapchat.android</string>
+    <string name="instagram">com.instagram.android</string>
+    <string name="twitter">com.twitter.android</string>
+    <string name="facebook">com.facebook.katana</string>
+    <string name="youtube">com.google.android.youtube</string>
+    <string name="tiktok">com.zhiliaoapp.musically</string>
+    <string name="whatsapp">com.whatsapp</string>
 </resources>

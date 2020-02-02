@@ -32,7 +32,10 @@ public class EnterPassword extends AppCompatActivity {
     String school_name = "";
     String email = "";
     String first_name = "";
-    String id = "";
+    String last_name;
+    String id;
+    String class_;
+    String year;
     EditText password_entry;
     ProgressDialog pd;
     JSONArray json;
@@ -40,12 +43,17 @@ public class EnterPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.EnterPassword);
         super.onCreate(savedInstanceState);
+        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_enter_password);
         school_id = getIntent().getStringExtra("school_id");
         school_name = getIntent().getStringExtra("school_name");
         email = getIntent().getStringExtra("email");
         first_name = getIntent().getStringExtra("first_name");
+        last_name = getIntent().getStringExtra("last_name");
         id = getIntent().getStringExtra("id");
+        year = getIntent().getStringExtra("year");
+        class_ = getIntent().getStringExtra("class");
+        Log.d("ENTERPASSWORD", "Initial ID: " + id);
         password_entry = findViewById(R.id.enter_password_password);
         Snackbar.make(findViewById(R.id.enter_password_relative_layout), "Hey there " + first_name + "!", Snackbar.LENGTH_SHORT).show();
     }
@@ -132,13 +140,20 @@ public class EnterPassword extends AppCompatActivity {
                 }
                 return;
             }
-            String id = "";
             for (int i=0; i < json.length(); i++) {
                 Snackbar.make(findViewById(R.id.enter_password_relative_layout), "Logged in successfully!", Snackbar.LENGTH_SHORT).show();
                 SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
+                Log.d("EEE" ,"FINAL ID: " + id);
                 editor.putString("login_id", id);
+                editor.putString("first_name", first_name);
+                editor.putString("last_name", last_name);
+                editor.putString("class", class_);
+                editor.putString("year", year);
+                editor.putString("school_name",school_name);
+                editor.putString("school_id", school_id);
                 editor.apply();
+                EnterPassword.this.startActivity(new Intent(EnterPassword.this, LandingHome.class));
             }
             if (pd.isShowing()) {
                 pd.dismiss();
