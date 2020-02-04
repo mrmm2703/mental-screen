@@ -65,7 +65,7 @@ public class SignUpPassword extends AppCompatActivity {
             Snackbar.make(relativeLayout, "Enter a password", Snackbar.LENGTH_SHORT).show();
         } else {
             Log.d("EEE", school_name.replace("&", "!$4$!"));
-            String url = getResources().getString(R.string.domain) + "/create_user.php?"
+            String url = getResources().getString(R.string.domain) + "create_user.php?"
                     + "email=" + email
                     + "&password=" + password.replace("&", "!$4$!")
                     + "&first_name=" + first_name
@@ -73,7 +73,7 @@ public class SignUpPassword extends AppCompatActivity {
                     + "&school_id=" + school_id
                     + "&school_name=" + school_name.replace("&", "!$4$!")
                     + "&year=" + year
-                    + "&class" + class_;
+                    + "&class=" + class_;
             new AsyncTask().execute(url);
         }
     }
