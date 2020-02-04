@@ -32,11 +32,14 @@
         <activity android:name=".SignUpPassword">
 
         </activity>
-        <activity android:name=".LandingHome">
+        <activity android:name=".LandingHomeDaily">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".LandingHomeWeekly">
+
         </activity>
     </application>
 

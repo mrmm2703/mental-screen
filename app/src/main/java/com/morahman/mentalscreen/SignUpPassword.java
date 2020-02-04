@@ -1,9 +1,7 @@
 package com.morahman.mentalscreen;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -175,7 +173,7 @@ public class SignUpPassword extends AppCompatActivity {
                     return;
                 }
             }
-            SignUpPassword.this.startActivity(new Intent(SignUpPassword.this, LandingHome.class));
+            SignUpPassword.this.startActivity(new Intent(SignUpPassword.this, LandingHomeDaily.class));
             if (pd.isShowing()) {
                 pd.dismiss();
             }

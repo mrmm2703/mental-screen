@@ -1,9 +1,7 @@
 package com.morahman.mentalscreen;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -153,7 +150,7 @@ public class EnterPassword extends AppCompatActivity {
                 editor.putString("school_name",school_name);
                 editor.putString("school_id", school_id);
                 editor.apply();
-                EnterPassword.this.startActivity(new Intent(EnterPassword.this, LandingHome.class));
+                EnterPassword.this.startActivity(new Intent(EnterPassword.this, LandingHomeDaily.class));
             }
             if (pd.isShowing()) {
                 pd.dismiss();

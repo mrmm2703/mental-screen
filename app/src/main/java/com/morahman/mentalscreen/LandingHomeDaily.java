@@ -2,27 +2,24 @@ package com.morahman.mentalscreen;
 
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
-import android.app.ProgressDialog;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.TextViewCompat;
 
@@ -45,7 +42,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-public class LandingHome extends AppCompatActivity {
+public class LandingHomeDaily extends AppCompatActivity {
     String id;
     String first_name;
     String last_name;
@@ -54,19 +51,24 @@ public class LandingHome extends AppCompatActivity {
     String class_;
     String year_group;
     TextView name_text;
+    TextView secondary_text;
     JSONArray json;
     UsageStatsManager usageStatsManager;
     SharedPreferences sharedPreferences;
+
+    public void onWeeklyButtonPress(View view) {
+        LandingHomeDaily.this.startActivity(new Intent(LandingHomeDaily.this, LandingHomeWeekly.class));
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         if (id == null) {
             Log.d("LANDING", "NULL ID");
-            LandingHome.this.startActivity(new Intent(LandingHome.this, EnterSchool.class));
+            LandingHomeDaily.this.startActivity(new Intent(LandingHomeDaily.this, EnterSchool.class));
         } else {
             if (!isAccessGranted()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(LandingHome.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(LandingHomeDaily.this);
                 builder.setMessage("App needs usage access to work. Press OK to open settings and enable usage access to Mental Screen.");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -92,6 +94,8 @@ public class LandingHome extends AppCompatActivity {
                 year_group = sharedPreferences.getString("year", "null");
                 name_text = findViewById(R.id.activity_landing_home_hey_text);
                 name_text.setText("HEY " + first_name.toUpperCase() + "!");
+                secondary_text = findViewById(R.id.activity_landing_home_hey_text2);
+                secondary_text.setText(class_.toUpperCase() + " LEADERBOARD");
                 usageStatsManager = (UsageStatsManager) getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
                 getAppTimes();
                 getAppTimesYesterday();
@@ -102,9 +106,10 @@ public class LandingHome extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.EnterSchool);
         super.onCreate(savedInstanceState);
         this.getSupportActionBar().hide();
-        setContentView(R.layout.activity_landing_home);
+        setContentView(R.layout.activity_landing_home_daily);
         sharedPreferences = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         id = sharedPreferences.getString("login_id", null);
 
@@ -361,6 +366,7 @@ public class LandingHome extends AppCompatActivity {
                     Snackbar.make(findViewById(R.id.activity_landing_home_linear_layout), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
                 }
                 LinearLayout linearLayout = findViewById(R.id.activity_landing_home_leaderboard_parent);
+                linearLayout.removeAllViews();
                 for (int i=0; i < json.length(); i++) {
                     try {
                         JSONObject jsonObject = json.getJSONObject(i);
