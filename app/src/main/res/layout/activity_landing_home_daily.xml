@@ -70,7 +70,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/activity_landing_home_leaderboard_parent"
+                android:id="@+id/activity_landing_home_daily_leaderboard_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

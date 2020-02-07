@@ -2,7 +2,6 @@ package com.morahman.mentalscreen;
 
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
-import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,12 +35,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -111,7 +105,7 @@ public class LandingHomeWeekly extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.EnterPassword);
         super.onCreate(savedInstanceState);
-        this.getSupportActionBar().hide();
+//        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_landing_home_weekly);
         sharedPreferences = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         id = sharedPreferences.getString("login_id", null);
@@ -192,7 +186,7 @@ public class LandingHomeWeekly extends AppCompatActivity {
                 } catch (JSONException e) {
                     Snackbar.make(findViewById(R.id.activity_landing_home_linear_layout), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
                 }
-                LinearLayout linearLayout = findViewById(R.id.activity_landing_home_leaderboard_parent);
+                LinearLayout linearLayout = findViewById(R.id.activity_landing_home_weekly_leaderboard_linear_layout);
                 linearLayout.removeAllViews();
                 for (int i=0; i < json.length(); i++) {
                     try {

@@ -1,46 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.morahman.mentalscreen">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".EnterSchool">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
-        <activity android:name=".EnterEmail">
-
-        </activity>
-        <activity android:name=".EnterPassword">
-
-        </activity>
-        <activity android:name=".SignUpName">
-
-        </activity>
-        <activity android:name=".SignUpClass">
-
-        </activity>
-        <activity android:name=".SignUpPassword">
-
-        </activity>
-        <activity android:name=".LandingHomeDaily">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".LandingPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LandingHomeWeekly">
-
+        <activity
+            android:name=".ClassView"
+            android:label="Class View"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".EnterSchool">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".EnterEmail" />
+        <activity android:name=".EnterPassword" />
+        <activity android:name=".SignUpName" />
+        <activity android:name=".SignUpClass" />
+        <activity android:name=".SignUpPassword" />
+        <activity android:name=".LandingHomeDaily">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".LandingHomeWeekly" />
     </application>
 
 </manifest>

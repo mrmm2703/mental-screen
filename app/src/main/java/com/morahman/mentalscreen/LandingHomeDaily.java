@@ -2,6 +2,7 @@ package com.morahman.mentalscreen;
 
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
+import android.app.usage.UsageEvents;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -36,10 +38,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LandingHomeDaily extends AppCompatActivity {
@@ -55,6 +56,9 @@ public class LandingHomeDaily extends AppCompatActivity {
     JSONArray json;
     UsageStatsManager usageStatsManager;
     SharedPreferences sharedPreferences;
+    long background_time;
+    long foreground_time;
+    Map<String, String> timesMap = new HashMap<>();
 
     public void onWeeklyButtonPress(View view) {
         LandingHomeDaily.this.startActivity(new Intent(LandingHomeDaily.this, LandingHomeWeekly.class));
@@ -98,7 +102,7 @@ public class LandingHomeDaily extends AppCompatActivity {
                 secondary_text.setText(class_.toUpperCase() + " LEADERBOARD");
                 usageStatsManager = (UsageStatsManager) getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
                 getAppTimes();
-                getAppTimesYesterday();
+//                getAppTimesYesterday();
                 new AsyncTask().execute(getResources().getString(R.string.domain) + "get_leaderboard.php?class=" + class_+ "&school_id=" + school_id);
             }
         }
@@ -108,10 +112,12 @@ public class LandingHomeDaily extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.EnterSchool);
         super.onCreate(savedInstanceState);
-        this.getSupportActionBar().hide();
+//        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_landing_home_daily);
         sharedPreferences = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         id = sharedPreferences.getString("login_id", null);
+        name_text = findViewById(R.id.activity_landing_home_hey_text);
+        secondary_text = findViewById(R.id.activity_landing_home_hey_text2);
 
     }
 
@@ -132,8 +138,8 @@ public class LandingHomeDaily extends AppCompatActivity {
     public void getAppTimes() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.HOUR, 0);
         calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         long time_snapchat = 0;
         long time_instagram = 0;
@@ -144,23 +150,115 @@ public class LandingHomeDaily extends AppCompatActivity {
         long time_whatsapp = 0;
         long total_time = 0;
         Map<String, UsageStats> usageStatsMap;
-        long start_of_day_epoch = 0;
-        Date currentTime = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("\"yyyy-mm-dd hh:mm:ss\"");
-        String strDate = dateFormat.format(currentTime);
-        Log.d("DATE", strDate);
-        if (Integer.parseInt(strDate.substring(12, 14)) >= 12) {
-            start_of_day_epoch = calendar.getTimeInMillis() - 43200000;
-        } else {
-            start_of_day_epoch = calendar.getTimeInMillis();
-        }
+        long start_of_day_epoch = calendar.getTimeInMillis();
+//        long start_of_day_epoch = System.currentTimeMillis() - 1000;
         long current_time_epoch = System.currentTimeMillis();
         Log.d("START OF DAY", Long.toString(start_of_day_epoch));
         Log.d("CURRENT EPOCH", Long.toString(current_time_epoch));
         usageStatsMap = usageStatsManager.queryAndAggregateUsageStats(start_of_day_epoch, current_time_epoch);
+        List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, start_of_day_epoch, current_time_epoch);
+        UsageEvents eventList = usageStatsManager.queryEvents(start_of_day_epoch, current_time_epoch);
+        Log.d("EVENT", " - STARTING - ");
+        String current_package = "";
+        int i = 0;
+        while (eventList.hasNextEvent()) {
+            UsageEvents.Event currentEvent = new UsageEvents.Event();
+            eventList.getNextEvent(currentEvent);
+            if (currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                current_package = currentEvent.getPackageName();
+                foreground_time = currentEvent.getTimeStamp();
+            } else if (currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) {
+                background_time = currentEvent.getTimeStamp();
+                if (timesMap.size() == 0) {
+                    timesMap.put(current_package, Long.toString(background_time - foreground_time));
+                } else {
+                    if (timesMap.containsValue(current_package)) {
+                        String existing_time = timesMap.get(current_package);
+                        long existing_time_long = Long.parseLong(existing_time);
+                        existing_time_long = existing_time_long + (background_time - foreground_time);
+                        timesMap.remove(current_package);
+                        timesMap.put(current_package, Long.toString(existing_time_long));
+                    } else {
+                        timesMap.put(current_package, Long.toString(background_time - foreground_time));
+                    }
+                }
+            }
+        }
+
+        while (eventList.hasNextEvent()) {
+            UsageEvents.Event currentEvent = new UsageEvents.Event();
+            eventList.getNextEvent(currentEvent);
+            Log.d(currentEvent.getPackageName(), Long.toString(currentEvent.getTimeStamp()));
+            if (currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                String current_app = currentEvent.getPackageName();
+                Log.d("TIME_EX", current_app);
+                foreground_time = currentEvent.getTimeStamp();
+                Log.d("TIME_EX", Long.toString(foreground_time));
+                while (eventList.hasNextEvent()) {
+                    UsageEvents.Event anotherEvent = new UsageEvents.Event();
+                    eventList.getNextEvent(anotherEvent);
+                    Log.d("TIME_EXX", anotherEvent.getPackageName());
+                    Log.d("TIME_EXX", Integer.toString(anotherEvent.getEventType()));
+                    if (anotherEvent.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) {
+                        background_time = currentEvent.getTimeStamp();
+                    }
+                }
+                if (timesMap.size() == 0) {
+                    timesMap.put(current_app, Long.toString(background_time - foreground_time));
+                } else {
+                    if (timesMap.containsValue(current_app)) {
+                        String existing_time = timesMap.get(current_app);
+                        long existing_time_long = Long.parseLong(existing_time);
+                        existing_time_long = existing_time_long + (background_time - foreground_time);
+                        timesMap.remove(current_app);
+                        timesMap.put(current_app, Long.toString(existing_time_long));
+                    } else {
+                        timesMap.put(current_app, Long.toString(background_time - foreground_time));
+                    }
+                }
+            }
+            switch (currentEvent.getEventType()) {
+                case UsageEvents.Event.MOVE_TO_FOREGROUND:
+                    Log.d(currentEvent.getPackageName(), "MOVE_TO_FOREGROUND");
+                    break;
+                case UsageEvents.Event.MOVE_TO_BACKGROUND:
+                    Log.d(currentEvent.getPackageName(), "MOVE_TO_BACKGROUND");
+                    break;
+                case UsageEvents.Event.NONE:
+                    Log.d(currentEvent.getPackageName(), "NONE");
+                    break;
+                case UsageEvents.Event.SHORTCUT_INVOCATION:
+                    Log.d(currentEvent.getPackageName(), "SHORTCUT_INVOCATION");;
+                    break;
+                case UsageEvents.Event.USER_INTERACTION:
+                    Log.d(currentEvent.getPackageName(), "USER_INTERACTION");
+                    break;
+                case UsageEvents.Event.CONFIGURATION_CHANGE:
+                    Log.d(currentEvent.getPackageName(), "CONFIGURATION_CHANGE");
+                    break;
+            }
+        }
+        for (Map.Entry<String, String> entry : timesMap.entrySet()) {
+            Log.d("TIMEEEEE", entry.getKey() + ": " + entry.getValue());
+        }
+
+        // queryUsageStats method
+        long totalTime2 = 0;
+        for (UsageStats usageStats : usageStatsList) {
+            Log.d("PACKAGE"," - NEW PACKAGE -");
+            Log.d("PACKAGE", usageStats.getPackageName());
+            Log.d("PACKAGE", Long.toString(usageStats.getFirstTimeStamp()));
+            Log.d("PACKAGE", Long.toString(usageStats.getLastTimeStamp()));
+            Log.d("PACKAGE", Long.toString(usageStats.getTotalTimeInForeground()));
+            totalTime2 += usageStats.getTotalTimeInForeground();
+        }
+        Log.d("PACKAGE DONE!", Long.toString(totalTime2));
+
+        // queryAndAggregateUsageStats method
         for (Map.Entry<String, UsageStats> entry : usageStatsMap.entrySet()) {
             String package_name = entry.getValue().getPackageName();
             long time_spent = entry.getValue().getTotalTimeInForeground();
+            Log.d("---USAGE---", package_name + ":" + Long.toString(time_spent));
             total_time += time_spent;
             switch (package_name) {
                 case "com.facebook.katana":
@@ -218,8 +316,8 @@ public class LandingHomeDaily extends AppCompatActivity {
         Log.d("YESTERDAY STATS", "YESTERDAY STATSSSSSSSSSSS");
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.HOUR, 0);
         calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         long time_snapchat = 0;
         long time_instagram = 0;
@@ -230,22 +328,10 @@ public class LandingHomeDaily extends AppCompatActivity {
         long time_whatsapp = 0;
         long total_time = 0;
         Map<String, UsageStats> usageStatsMap;
-        long start_of_day_epoch = 0;
-        Date currentTime = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("\"yyyy-mm-dd hh:mm:ss\"");
-        String strDate = dateFormat.format(currentTime);
-        if (Integer.parseInt(strDate.substring(12, 14)) >= 12) {
-            start_of_day_epoch = calendar.getTimeInMillis() - 43200000;
-        } else {
-            start_of_day_epoch = calendar.getTimeInMillis();
-        }
+        long start_of_day_epoch = calendar.getTimeInMillis();
         Calendar calendar1 = Calendar.getInstance();
         calendar1.add(Calendar.DATE, -1);
         Log.d("START OF DAY", Long.toString(start_of_day_epoch));
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
         long start_of_yesterday_epoch = start_of_day_epoch - 86400000;
         Log.d("YESTERDAY START", Long.toString(start_of_yesterday_epoch));
         usageStatsMap = usageStatsManager.queryAndAggregateUsageStats(start_of_yesterday_epoch, start_of_day_epoch);
@@ -365,7 +451,7 @@ public class LandingHomeDaily extends AppCompatActivity {
                 } catch (JSONException e) {
                     Snackbar.make(findViewById(R.id.activity_landing_home_linear_layout), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
                 }
-                LinearLayout linearLayout = findViewById(R.id.activity_landing_home_leaderboard_parent);
+                LinearLayout linearLayout = findViewById(R.id.activity_landing_home_daily_leaderboard_linear_layout);
                 linearLayout.removeAllViews();
                 for (int i=0; i < json.length(); i++) {
                     try {
@@ -397,6 +483,8 @@ public class LandingHomeDaily extends AppCompatActivity {
                         if (student_id_json.equals(id)) {
                             textView1.setTextColor(getResources().getColor(R.color.black));
                             textView2.setTextColor(getResources().getColor(R.color.black));
+                            textView1.setTypeface(null, Typeface.BOLD);
+                            textView2.setTypeface(null, Typeface.BOLD);
                         }
                         parent.addView(textView1);
                         parent.addView(textView2);
