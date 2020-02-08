@@ -1,6 +1,7 @@
 package com.morahman.mentalscreen.ui.main;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -33,15 +34,19 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
         Fragment fragment = null;
+        Log.d("SectionsPagerAdapter", "CALLED");
         switch (position) {
             case 0:
-                fragment = FragmentClassDaily.newInstance("","");
+//                fragment = FragmentClassDaily.newInstance("","");
+                fragment = new FragmentClassDaily();
                 break;
             case 1:
-                fragment = FragmentClassWeekly.newInstance("","");
+//                fragment = FragmentClassWeekly.newInstance("","");
+                fragment = new FragmentClassWeekly();
                 break;
             case 2:
-                fragment = FragmentClassMonthly.newInstance("","");
+//                fragment = FragmentClassMonthly.newInstance("","");
+                fragment = new FragmentClassMonthly();
                 break;
         }
         return fragment;

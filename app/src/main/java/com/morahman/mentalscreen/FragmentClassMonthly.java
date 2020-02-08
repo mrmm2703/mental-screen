@@ -65,7 +65,9 @@ public class FragmentClassMonthly extends Fragment {
     SharedPreferences sharedPreferences;
     Map<String, ArrayList<String>> data_map = new HashMap<String, ArrayList<String>>();
     Map<String, Integer> data_map_count = new HashMap<>();
-    Map<Integer, String> name_int_pair = new HashMap<>();
+//    Map<Integer, String> name_int_pair = new HashMap<>();
+    Map<Integer, ArrayList<String>> score_keyed_data = new HashMap<>();
+
     JSONArray json;
 
     public void createCard(LinearLayout parent, Integer position, String name, Integer score, String class_) {
@@ -262,25 +264,31 @@ public class FragmentClassMonthly extends Fragment {
                     Map.Entry pair = (Map.Entry) iterator.next();
                     String name = (String) ((ArrayList<String>) pair.getValue()).get(0);
                     Integer time = Integer.parseInt(((ArrayList<String>) pair.getValue()).get(1));
-                    name_int_pair.put(time, name);
+                    String student_id_local = (String) pair.getKey();
+//                    name_int_pair.put(time, name);
+                    ArrayList<String> arrayList = new ArrayList<String>();
+                    arrayList.add(student_id_local);
+                    arrayList.add(name);
+                    score_keyed_data.put(time, arrayList);
                 }
-                Map<Integer, String> sortedMap = new TreeMap<Integer, String>(name_int_pair);
-                iterator = data_map.entrySet().iterator();
+                Map<Integer, ArrayList<String>> sortedMap = new TreeMap<>(score_keyed_data);
+//                Map<Integer, String> sortedMap = new TreeMap<Integer, String>(name_int_pair);
+                iterator = sortedMap.entrySet().iterator();
                 int i = 0;
-                int year = Calendar.getInstance().get(Calendar.YEAR);
-                int month = Calendar.getInstance().get(Calendar.MONTH);
-                Calendar myCal = new GregorianCalendar(year, month, 1);
-                int daysInMonth = myCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+                int daysNeeded = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                Log.d("MONTHLY", "COUNT NEEDED: " + daysNeeded);
                 while (iterator.hasNext()) {
                     i ++;
                     Map.Entry pair = (Map.Entry) iterator.next();
-                    String name = (String) ((ArrayList<String>) pair.getValue()).get(0);
-                    String time = (String) ((ArrayList<String>) pair.getValue()).get(1);
-                    Integer count = data_map_count.get(pair.getKey());
-                    if (!(count == daysInMonth)) {
+                    String name = (String) ((ArrayList<String>) pair.getValue()).get(1);
+                    Integer time = (Integer) pair.getKey();
+                    Integer count = data_map_count.get(((ArrayList<String>) pair.getValue()).get(0));
+                    Log.d("MONTHLY", "USER: " + name);
+                    Log.d("MONTHLY", "COUNT: " + data_map_count.get(((ArrayList<String>) pair.getValue()).get(0)));
+                    if (!(count == daysNeeded)) {
                         name = name + "*";
                     }
-                    createCard(linearLayout, i, name, Integer.parseInt(time), "12S2 (YEAR 12)");
+                    createCard(linearLayout, i, name, time, class_.toUpperCase() + " (YEAR " + year_group + ")");
 //                    LinearLayout parent = new LinearLayout(getContext());
 //                    int pixels = (int) (40 * getContext().getResources().getDisplayMetrics().density);
 //                    parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, pixels));

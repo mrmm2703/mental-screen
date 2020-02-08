@@ -14,18 +14,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LandingPage">
+        <activity
+            android:name=".Year111"
+            android:label="@string/title_activity_year111"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".LandingHome"
+            android:label="@string/title_activity_landing_home"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".LandingPage">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
         <activity
             android:name=".ClassView"
             android:label="Class View"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".EnterSchool">
 
             <!-- <intent-filter> -->

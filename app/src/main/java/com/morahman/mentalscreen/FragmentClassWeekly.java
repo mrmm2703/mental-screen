@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,7 +34,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -70,7 +74,8 @@ public class FragmentClassWeekly extends Fragment {
     SharedPreferences sharedPreferences;
     Map<String, ArrayList<String>> data_map = new HashMap<String, ArrayList<String>>();
     Map<String, Integer> data_map_count = new HashMap<>();
-    Map<Integer, String> name_int_pair = new HashMap<>();
+//    Map<Integer, String> name_int_pair = new HashMap<>();
+    Map<Integer, ArrayList<String>> score_keyed_data = new HashMap<>();
     JSONArray json;
 
     private OnFragmentInteractionListener mListener;
@@ -172,51 +177,87 @@ public class FragmentClassWeekly extends Fragment {
                     Map.Entry pair = (Map.Entry) iterator.next();
                     String name = (String) ((ArrayList<String>) pair.getValue()).get(0);
                     Integer time = Integer.parseInt(((ArrayList<String>) pair.getValue()).get(1));
-                    name_int_pair.put(time, name);
+                    String student_id_local = (String) pair.getKey();
+//                    name_int_pair.put(time, name);
+                    ArrayList<String> arrayList = new ArrayList<String>();
+                    arrayList.add(student_id_local);
+                    arrayList.add(name);
+                    score_keyed_data.put(time, arrayList);
                 }
-                Map<Integer, String> sortedMap = new TreeMap<Integer, String>(name_int_pair);
-                iterator = data_map.entrySet().iterator();
+//                Map<Integer, String> sortedMap = new TreeMap<Integer, String>(name_int_pair);
+                Map<Integer, ArrayList<String>> sortedMap = new TreeMap<>(score_keyed_data);
+                iterator = sortedMap.entrySet().iterator();
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+                long start_of_week_milli = cal.getTimeInMillis();
+                cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                long current_day_milli = cal.getTimeInMillis();
+                long different = current_day_milli - start_of_week_milli;
+                float daysBetween = (different / (1000*60*60*24)) + 1;
+                int daysNeeded = (int) daysBetween;
                 int i = 0;
                 while (iterator.hasNext()) {
                     i ++;
                     Map.Entry pair = (Map.Entry) iterator.next();
-                    String name = (String) ((ArrayList<String>) pair.getValue()).get(0);
-                    String time = (String) ((ArrayList<String>) pair.getValue()).get(1);
-                    Integer count = data_map_count.get(pair.getKey());
-                    if (!(count == 7)) {
+                    String name = (String) ((ArrayList<String>) pair.getValue()).get(1);
+                    String student_id_local = (String) ((ArrayList<String>) pair.getValue()).get(0);
+                    Integer time = (Integer) pair.getKey();
+                    Integer count = data_map_count.get(student_id_local);
+                    if (!(count == daysNeeded)) {
                         name = name + "*";
                     }
-                    createCard(linearLayout, i, name, Integer.parseInt(time), "12S2 (YEAR 12)");
-//                    LinearLayout parent = new LinearLayout(getContext());
-//                    int pixels = (int) (40 * getContext().getResources().getDisplayMetrics().density);
-//                    parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, pixels));
-//                    parent.setOrientation(LinearLayout.HORIZONTAL);
-//                    TextView textView1 = new TextView(getContext());
-//                    textView1.setText(name);
-//                    textView1.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0.8f));
-////                    textView1.setTypeface(ResourcesCompat.getFont(getContext(), R.font.fredoka_one));
-//                    textView1.setGravity(Gravity.CENTER_VERTICAL);
-//                    pixels = (int) (10 * getContext().getResources().getDisplayMetrics().density);
-//                    textView1.setPadding(pixels, pixels, pixels, pixels);
-//                    TextViewCompat.setAutoSizeTextTypeWithDefaults(textView1, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-//                    TextView textView2 = new TextView(getContext());
-//                    textView2.setText(time);
-//                    textView2.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0.2f));
-////                    textView2.setTypeface(ResourcesCompat.getFont(getContext(), R.font.fredoka_one));
-//                    textView2.setGravity(Gravity.CENTER_VERTICAL);
-//                    pixels = (int) (10 * getContext().getResources().getDisplayMetrics().density);
-//                    textView2.setPadding(pixels, pixels, pixels, pixels);
-//                    TextViewCompat.setAutoSizeTextTypeWithDefaults(textView2, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-//                    if (pair.getKey().equals(id)) {
-//                        textView1.setTextColor(getResources().getColor(R.color.black));
-//                        textView2.setTextColor(getResources().getColor(R.color.black));
-//                        textView1.setTypeface(null, Typeface.BOLD);
-//                        textView2.setTypeface(null, Typeface.BOLD);
-//                    }
-//                    parent.addView(textView1);
-//                    parent.addView(textView2);
-//                    linearLayout.addView(parent);
+                    createCard(linearLayout, i, name, time, class_.toUpperCase()+" (YEAR "+year_group+")");
                 }
+//                iterator = data_map.entrySet().iterator();
+//                int i = 0;
+//                while (iterator.hasNext()) {
+//                    i ++;
+//                    Map.Entry pair = (Map.Entry) iterator.next();
+//                    String name = (String) ((ArrayList<String>) pair.getValue()).get(0);
+//                    String time = (String) ((ArrayList<String>) pair.getValue()).get(1);
+//                    Integer count = data_map_count.get(pair.getKey());
+//                    if (!(count == 7)) {
+//                        name = name + "*";
+//                    }
+//                    createCard(linearLayout, i, name, Integer.parseInt(time), "12S2 (YEAR 12)");
+////                    LinearLayout parent = new LinearLayout(getContext());
+////                    int pixels = (int) (40 * getContext().getResources().getDisplayMetrics().density);
+////                    parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, pixels));
+////                    parent.setOrientation(LinearLayout.HORIZONTAL);
+////                    TextView textView1 = new TextView(getContext());
+////                    textView1.setText(name);
+////                    textView1.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0.8f));
+//////                    textView1.setTypeface(ResourcesCompat.getFont(getContext(), R.font.fredoka_one));
+////                    textView1.setGravity(Gravity.CENTER_VERTICAL);
+////                    pixels = (int) (10 * getContext().getResources().getDisplayMetrics().density);
+////                    textView1.setPadding(pixels, pixels, pixels, pixels);
+////                    TextViewCompat.setAutoSizeTextTypeWithDefaults(textView1, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+////                    TextView textView2 = new TextView(getContext());
+////                    textView2.setText(time);
+////                    textView2.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0.2f));
+//////                    textView2.setTypeface(ResourcesCompat.getFont(getContext(), R.font.fredoka_one));
+////                    textView2.setGravity(Gravity.CENTER_VERTICAL);
+////                    pixels = (int) (10 * getContext().getResources().getDisplayMetrics().density);
+////                    textView2.setPadding(pixels, pixels, pixels, pixels);
+////                    TextViewCompat.setAutoSizeTextTypeWithDefaults(textView2, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+////                    if (pair.getKey().equals(id)) {
+////                        textView1.setTextColor(getResources().getColor(R.color.black));
+////                        textView2.setTextColor(getResources().getColor(R.color.black));
+////                        textView1.setTypeface(null, Typeface.BOLD);
+////                        textView2.setTypeface(null, Typeface.BOLD);
+////                    }
+////                    parent.addView(textView1);
+////                    parent.addView(textView2);
+////                    linearLayout.addView(parent);
+//                }
             }
         }
     }

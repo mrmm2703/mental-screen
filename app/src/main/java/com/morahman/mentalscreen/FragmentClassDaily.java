@@ -97,10 +97,14 @@ public class FragmentClassDaily extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("FragmentClassDaily", "onCreate called");
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    public void createUI() {
         sharedPreferences = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         id = sharedPreferences.getString("login_id", "null");
         first_name = sharedPreferences.getString("first_name", "null");
@@ -120,8 +124,12 @@ public class FragmentClassDaily extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_class_daily, container, false);
+        Log.d("FragmentClassDaily", "onCreateView called");
+        createUI();
         return view;
     }
+
+
 
     public void getAppTimesYesterday() {
         Log.d("YESTERDAY STATS", "YESTERDAY STATSSSSSSSSSSS");
