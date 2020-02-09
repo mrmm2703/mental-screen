@@ -68,7 +68,7 @@ public class LandingPage extends AppCompatActivity {
                     });
                     builder.create().show();
                 } else {
-                    LandingPage.this.startActivity(new Intent(LandingPage.this, ClassView.class));
+                    LandingPage.this.startActivity(new Intent(LandingPage.this, LandingHome.class));
                 }
             }
         }

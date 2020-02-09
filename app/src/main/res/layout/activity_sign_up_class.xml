@@ -42,7 +42,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="50dp"
             android:fontFamily="@font/fredoka_one"
-            android:text="Enter your year group (Put 12 yh ofc):"
+            android:text="Enter your year group:"
             android:textColor="@color/grey"
             android:textSize="17sp" />
 
@@ -66,7 +66,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="50dp"
             android:fontFamily="@font/fredoka_one"
-            android:text="Choose your class (Choose 12S2 lmao):"
+            android:text="Choose your class:"
             android:textColor="@color/grey"
             android:textSize="17sp" />
 

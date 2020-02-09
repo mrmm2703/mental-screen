@@ -27,6 +27,7 @@ public class HomeFragment extends Fragment {
     SharedPreferences sharedPreferences;
     String id;
     String class_;
+    Fragment nav_host_fragment;
 //    private HomeViewModel homeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -56,12 +57,23 @@ public class HomeFragment extends Fragment {
 //            fragmentTransaction.commit();
 //        }
         ViewPager viewPager = root.findViewById(R.id.view_pager);
+
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
-        Fragment fragment = (Fragment) FragmentClassDaily.newInstance("", "");
-//        getFragmentManager().beginTransaction().replace(getFragmentManager().findFragmentById(R.id.fragment_class_daily_parent).getId(), fragment).addToBackStack(null).commit();
         TabLayout tabs = root.findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        Fragment fragment = (Fragment) FragmentClassDaily.newInstance("", "");
+        List<Fragment> fragments = getFragmentManager().getFragments();
+        for (Fragment fragment1 : fragments) {
+            Log.d("FRAG", String.valueOf(getResources().getResourceName(fragment1.getId())));
+            nav_host_fragment = fragment1;
+        }
+        for (Fragment fragment1 : nav_host_fragment.getChildFragmentManager().getFragments()) {
+            Log.d("FRAG2", String.valueOf(getResources().getResourceName(fragment1.getId())));
+        }
+//        getChildFragmentManager().beginTransaction().replace(root.findViewById(R.id.fragment_class_monthly_scroll_view).getId(), fragment).addToBackStack(null).commit();
+
         return root;
     }
 

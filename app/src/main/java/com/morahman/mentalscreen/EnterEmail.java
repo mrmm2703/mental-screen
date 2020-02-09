@@ -42,7 +42,7 @@ public class EnterEmail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.EnterEmail);
         super.onCreate(savedInstanceState);
-        this.getSupportActionBar().hide();
+//        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_enter_email);
         school_id = getIntent().getStringExtra("school_id");
         school_name = getIntent().getStringExtra("school_name");

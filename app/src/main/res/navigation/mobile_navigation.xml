@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_class" />
 
     <fragment
+        android:id="@+id/nav_refresh"
+        android:name="com.morahman.mentalscreen.ui.gallery.RefreshFragment"
+        android:label="REFRESH"
+        tools:layout="@layout/fragment_refresh" />
+
+    <fragment
         android:id="@+id/nav_gallery"
         android:name="com.morahman.mentalscreen.ui.gallery.GalleryFragment"
         android:label="YEAR LEADERBOARD"

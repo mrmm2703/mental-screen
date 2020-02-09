@@ -45,6 +45,10 @@
     <item android:title="OPTIONS">
         <menu>
             <item
+                android:id="@+id/nav_refresh"
+                android:icon="@drawable/refresh"
+                android:title="REFRESH" />
+            <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/menu_settings"
                 android:title="SETTINGS" />

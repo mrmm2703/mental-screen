@@ -31,7 +31,7 @@ public class EnterSchool extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.EnterSchool);
         super.onCreate(savedInstanceState);
-        this.getSupportActionBar().hide();
+//        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_enter_school);
         school_code_entry = findViewById(R.id.enter_school_school_code);
     }

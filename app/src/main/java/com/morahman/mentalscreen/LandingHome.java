@@ -1,6 +1,7 @@
 package com.morahman.mentalscreen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,6 +15,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -38,7 +41,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class LandingHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class LandingHome extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
     String id;
@@ -48,31 +51,9 @@ public class LandingHome extends AppCompatActivity implements NavigationView.OnN
     String school_name;
     String class_;
     String year_group;
+    DrawerLayout drawer;
 
     private AppBarConfiguration mAppBarConfiguration;
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        Log.d("onNavigationItemSeleced", "Called");
-        int id = item.getItemId();
-        Log.d("NAV ID", Integer.toString(R.id.nav_home));
-        Log.d("NAV ID", Integer.toString(id));
-        switch (id) {
-            case R.id.nav_home:
-                List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-                for (Fragment fragment : fragmentList) {
-                    Log.d("FRAG-REFRESHER", "DONE");
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.detach(fragment);
-                    fragmentTransaction.attach(fragment);
-                    fragmentTransaction.commit();
-                }
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +62,8 @@ public class LandingHome extends AppCompatActivity implements NavigationView.OnN
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setElevation(0);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-
-        navigationView.setNavigationItemSelectedListener(this);
 
         sharedPreferences = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         id = sharedPreferences.getString("login_id", "null");

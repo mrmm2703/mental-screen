@@ -8,6 +8,7 @@
     tools:context=".FragmentClassDaily">
 
     <ScrollView
+        android:id="@+id/fragment_class_daily_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

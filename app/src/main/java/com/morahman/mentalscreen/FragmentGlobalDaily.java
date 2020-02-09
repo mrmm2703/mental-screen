@@ -356,7 +356,7 @@ public class FragmentGlobalDaily extends Fragment {
                         String year = jsonObject.getString("year_group");
                         String school_name_json = jsonObject.getString("school_name");
 //                        LinearLayout parent = new LinearLayout(getContext());
-                        createCard(linearLayout, i+1, first_name_json+" "+last_name_json, Integer.parseInt(screen_time_minutes_json), school_name_json.toUpperCase()+" (YEAR "+year+")");
+                        createCard(linearLayout, i+1, first_name_json+" "+last_name_json, Integer.parseInt(screen_time_minutes_json), school_name_json.toUpperCase());
 //                        int pixels = (int) (40 * getContext().getResources().getDisplayMetrics().density);
 //                        parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, pixels));
 //                        parent.setOrientation(LinearLayout.HORIZONTAL);

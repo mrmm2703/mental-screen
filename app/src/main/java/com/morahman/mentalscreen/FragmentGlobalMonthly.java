@@ -303,7 +303,7 @@ public class FragmentGlobalMonthly extends Fragment {
                     if (!(count == daysNeeded)) {
                         name = name + "*";
                     }
-                    createCard(linearLayout, i, name, time, school_name_local.toUpperCase() + " (YEAR " + year_local + ")");
+                    createCard(linearLayout, i, name, time, school_name_local.toUpperCase());
 //                    LinearLayout parent = new LinearLayout(getContext());
 //                    int pixels = (int) (40 * getContext().getResources().getDisplayMetrics().density);
 //                    parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, pixels));

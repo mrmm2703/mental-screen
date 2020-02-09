@@ -40,7 +40,7 @@ public class EnterPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.EnterPassword);
         super.onCreate(savedInstanceState);
-        this.getSupportActionBar().hide();
+//        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_enter_password);
         school_id = getIntent().getStringExtra("school_id");
         school_name = getIntent().getStringExtra("school_name");
@@ -150,7 +150,7 @@ public class EnterPassword extends AppCompatActivity {
                 editor.putString("school_name",school_name);
                 editor.putString("school_id", school_id);
                 editor.apply();
-                EnterPassword.this.startActivity(new Intent(EnterPassword.this, LandingHomeDaily.class));
+                EnterPassword.this.startActivity(new Intent(EnterPassword.this, LandingPage.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             }
             if (pd.isShowing()) {
                 pd.dismiss();

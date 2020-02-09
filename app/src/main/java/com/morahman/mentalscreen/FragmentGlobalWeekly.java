@@ -226,7 +226,7 @@ public class FragmentGlobalWeekly extends Fragment {
                     if (!(count == daysNeeded)) {
                         name = name + "*";
                     }
-                    createCard(linearLayout, i, name, time, school_name_local.toUpperCase()+" (YEAR "+year_local+")");
+                    createCard(linearLayout, i, name, time, school_name_local.toUpperCase());
                 }
 //                iterator = data_map.entrySet().iterator();
 //                int i = 0;

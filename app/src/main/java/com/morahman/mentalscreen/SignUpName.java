@@ -19,7 +19,7 @@ public class SignUpName extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.SignUpName);
         super.onCreate(savedInstanceState);
-        this.getSupportActionBar().hide();
+//        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_sign_up_name);
         school_name = getIntent().getStringExtra("school_name");
         school_id = getIntent().getStringExtra("school_id");

@@ -23,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -114,6 +115,15 @@ public class FragmentClassDaily extends Fragment {
         class_ = sharedPreferences.getString("class", "null");
         year_group = sharedPreferences.getString("year", "null");
         usageStatsManager = (UsageStatsManager) getContext().getSystemService(Context.USAGE_STATS_SERVICE);
+//        FloatingActionButton fab = view.findViewById(R.id.fragment_class_daily_fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LinearLayout linearLayout = view.findViewById(R.id.fragment_class_daily_linear_layout);
+//                linearLayout.removeAllViews();
+//                createUI();
+//            }
+//        });
         getAppTimesYesterday();
         getAppTimes();
         new AsyncTask().execute(getResources().getString(R.string.domain) + "get_leaderboard.php?class=" + class_+ "&school_id=" + school_id);

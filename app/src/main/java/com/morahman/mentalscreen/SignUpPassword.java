@@ -42,7 +42,7 @@ public class SignUpPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.EnterPassword);
         super.onCreate(savedInstanceState);
-        this.getSupportActionBar().hide();
+//        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_sign_up_password);
         password_entry = findViewById(R.id.sign_up_password_password_entry);
         school_name = getIntent().getStringExtra("school_name");
@@ -173,7 +173,9 @@ public class SignUpPassword extends AppCompatActivity {
                     return;
                 }
             }
-            SignUpPassword.this.startActivity(new Intent(SignUpPassword.this, LandingHomeDaily.class));
+            Intent myIntent = new Intent(SignUpPassword.this, LandingPage.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            SignUpPassword.this.startActivity(myIntent);
             if (pd.isShowing()) {
                 pd.dismiss();
             }
