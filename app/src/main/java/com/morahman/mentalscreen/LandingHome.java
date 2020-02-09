@@ -10,14 +10,20 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.morahman.mentalscreen.ui.home.HomeFragment;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -30,7 +36,9 @@ import android.view.Menu;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class LandingHome extends AppCompatActivity {
+import java.util.List;
+
+public class LandingHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     SharedPreferences sharedPreferences;
     String id;
@@ -44,6 +52,29 @@ public class LandingHome extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        Log.d("onNavigationItemSeleced", "Called");
+        int id = item.getItemId();
+        Log.d("NAV ID", Integer.toString(R.id.nav_home));
+        Log.d("NAV ID", Integer.toString(id));
+        switch (id) {
+            case R.id.nav_home:
+                List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+                for (Fragment fragment : fragmentList) {
+                    Log.d("FRAG-REFRESHER", "DONE");
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.detach(fragment);
+                    fragmentTransaction.attach(fragment);
+                    fragmentTransaction.commit();
+                }
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_home);
@@ -52,6 +83,8 @@ public class LandingHome extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        navigationView.setNavigationItemSelectedListener(this);
 
         sharedPreferences = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         id = sharedPreferences.getString("login_id", "null");

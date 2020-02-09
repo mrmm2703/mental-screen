@@ -8,25 +8,23 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.morahman.mentalscreen.FragmentSchoolDaily;
-import com.morahman.mentalscreen.FragmentSchoolMonthly;
-import com.morahman.mentalscreen.FragmentSchoolWeekly;
-import com.morahman.mentalscreen.FragmentYearDaily;
+import com.morahman.mentalscreen.FragmentGlobalDaily;
+import com.morahman.mentalscreen.FragmentGlobalMonthly;
+import com.morahman.mentalscreen.FragmentGlobalWeekly;
 import com.morahman.mentalscreen.FragmentYearMonthly;
-import com.morahman.mentalscreen.FragmentYearWeekly;
 import com.morahman.mentalscreen.R;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapterSchool extends FragmentPagerAdapter {
+public class SectionsPagerAdapterGlobal extends FragmentPagerAdapter {
 
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
     private final Context mContext;
 
-    public SectionsPagerAdapterSchool(Context context, FragmentManager fm) {
+    public SectionsPagerAdapterGlobal(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
     }
@@ -38,13 +36,13 @@ public class SectionsPagerAdapterSchool extends FragmentPagerAdapter {
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = FragmentSchoolDaily.newInstance("","");
+                fragment = FragmentGlobalDaily.newInstance("","");
                 break;
             case 1:
-                fragment = FragmentSchoolWeekly.newInstance("","");
+                fragment = FragmentGlobalWeekly.newInstance("","");
                 break;
             case 2:
-                fragment = FragmentSchoolMonthly.newInstance("","");
+                fragment = FragmentGlobalMonthly.newInstance("","");
                 break;
         }
         return fragment;

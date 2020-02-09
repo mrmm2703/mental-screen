@@ -27,7 +27,7 @@
         android:id="@+id/nav_tools"
         android:name="com.morahman.mentalscreen.ui.tools.ToolsFragment"
         android:label="GLOBAL LEADERBOARD"
-        tools:layout="@layout/fragment_tools" />
+        tools:layout="@layout/fragment_global" />
 
     <fragment
         android:id="@+id/nav_share"

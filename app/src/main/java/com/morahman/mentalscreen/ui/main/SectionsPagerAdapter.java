@@ -37,16 +37,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         Log.d("SectionsPagerAdapter", "CALLED");
         switch (position) {
             case 0:
-//                fragment = FragmentClassDaily.newInstance("","");
-                fragment = new FragmentClassDaily();
+                fragment = FragmentClassDaily.newInstance("","");
+//                fragment = new FragmentClassDaily();
                 break;
             case 1:
-//                fragment = FragmentClassWeekly.newInstance("","");
-                fragment = new FragmentClassWeekly();
+                fragment = FragmentClassWeekly.newInstance("","");
+//                fragment = new FragmentClassWeekly();
                 break;
             case 2:
-//                fragment = FragmentClassMonthly.newInstance("","");
-                fragment = new FragmentClassMonthly();
+                fragment = FragmentClassMonthly.newInstance("","");
+//                fragment = new FragmentClassMonthly();
                 break;
         }
         return fragment;
