@@ -288,6 +288,7 @@ public class FragmentClassWeekly extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         Log.d("ONCREATE", "CALLED");
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);

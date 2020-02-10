@@ -4,6 +4,7 @@
     android:id="@+id/fragment_class_weekly_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey"
     tools:context=".FragmentClassWeekly">
 
     <ScrollView
