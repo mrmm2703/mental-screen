@@ -10,7 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,12 +42,12 @@ import java.util.TreeMap;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentSchoolWeekly.OnFragmentInteractionListener} interface
+ * {@link FragmentSelfWeekly.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentSchoolWeekly#newInstance} factory method to
+ * Use the {@link FragmentSelfWeekly#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentSchoolWeekly extends Fragment {
+public class FragmentSelfWeekly extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -124,105 +124,104 @@ public class FragmentSchoolWeekly extends Fragment {
             super.onPostExecute(result);
             Log.d("RRR", result);
             if (result.equals("No results found\n")) {
-                Snackbar.make(view.findViewById(R.id.fragment_school_weekly_parent), "Updates times on server", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view.findViewById(R.id.fragment_self_weekly_parent), "Updates times on server", Snackbar.LENGTH_SHORT).show();
             } else if (result.equals("Connection failed\n")) {
-                Snackbar.make(view.findViewById(R.id.fragment_school_weekly_parent), "Error 1: Endpoint could not connect to MySQL server", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view.findViewById(R.id.fragment_self_weekly_parent), "Error 1: Endpoint could not connect to MySQL server", Snackbar.LENGTH_SHORT).show();
             } else if (result.equals("1\n")) {
-                Snackbar.make(view.findViewById(R.id.fragment_school_weekly_parent), "Updated server with times", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view.findViewById(R.id.fragment_self_weekly_parent), "Updated server with times", Snackbar.LENGTH_SHORT).show();
             } else {
                 try {
                     json = new JSONArray(result);
                 } catch (JSONException e) {
-                    Snackbar.make(view.findViewById(R.id.fragment_school_weekly_parent), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view.findViewById(R.id.fragment_self_weekly_parent), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
                 }
-                LinearLayout linearLayout = view.findViewById(R.id.fragment_school_weekly_linear_layout);
+                LinearLayout linearLayout = view.findViewById(R.id.fragment_self_weekly_linear_layout);
                 linearLayout.removeAllViews();
+                Integer snapchat_total = 0;
+                Integer youtube_total = 0;
+                Integer instagram_total = 0;
+                Integer whatsapp_total = 0;
+                Integer tiktok_total = 0;
+                Integer twitter_total = 0;
+                Integer facebook_total = 0;
                 for (int i=0; i < json.length(); i++) {
                     try {
                         JSONObject jsonObject = json.getJSONObject(i);
                         String first_name_json = jsonObject.getString("first_name");
                         String last_name_json = jsonObject.getString("last_name");
                         String screen_time_minutes_json = jsonObject.getString("screen_time_minutes");
+                        String snapchat_time = jsonObject.getString("snapchat_minutes");
+                        String youtube_time = jsonObject.getString("youtube_minutes");
+                        String instagram_time = jsonObject.getString("instagram_minutes");
+                        String whatsapp_time = jsonObject.getString("whatsapp_minutes");
+                        String tiktok_time = jsonObject.getString("tiktok_minutes");
+                        String twitter_time = jsonObject.getString("twitter_minutes");
+                        String facebook_time = jsonObject.getString("facebook_minutes");
                         String student_id_json = jsonObject.getString("student_id");
-                        String class_json = jsonObject.getString("class");
-                        String year_json = jsonObject.getString("year_group");
-                        if (data_map.containsKey(student_id_json)) {
-                            String existing_name = data_map.get(student_id_json).get(0);
-                            Integer existing_time = Integer.parseInt(data_map.get(student_id_json).get(1));
-                            Integer new_time = existing_time + Integer.parseInt(screen_time_minutes_json);
-                            ArrayList<String> arrayList = new ArrayList<>();
-                            arrayList.add(existing_name);
-                            arrayList.add(new_time.toString());
-                            arrayList.add(class_json);
-                            arrayList.add(year_json);
-                            data_map.put(student_id_json, arrayList);
-                            Integer current_count = data_map_count.get(student_id_json);
-                            data_map_count.put(student_id_json, current_count+1);
-                        } else {
-                            String new_name = first_name_json + " " + last_name_json;
-                            ArrayList<String> arrayList = new ArrayList<>();
-                            arrayList.add(new_name);
-                            arrayList.add(screen_time_minutes_json);
-                            arrayList.add(class_json);
-                            arrayList.add(year_json);
-                            data_map.put(student_id_json, arrayList);
-                            data_map_count.put(student_id_json, 1);
-                        }
+                        snapchat_total += Integer.parseInt(snapchat_time);
+                        youtube_total += Integer.parseInt(youtube_time);
+                        instagram_total += Integer.parseInt(instagram_time);
+                        whatsapp_total += Integer.parseInt(whatsapp_time);
+                        tiktok_total += Integer.parseInt(tiktok_time);
+                        twitter_total += Integer.parseInt(twitter_time);
+                        facebook_total += Integer.parseInt(facebook_time);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Snackbar.make(view.findViewById(R.id.fragment_school_weekly_parent), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view.findViewById(R.id.fragment_self_monthly_parent), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
                     }
                 }
-                Iterator iterator = data_map.entrySet().iterator();
-                while (iterator.hasNext()) {
-                    Map.Entry pair = (Map.Entry) iterator.next();
-                    String name = (String) ((ArrayList<String>) pair.getValue()).get(0);
-                    Integer time = Integer.parseInt(((ArrayList<String>) pair.getValue()).get(1));
-                    String class_local = (String) (((ArrayList<String>) pair.getValue()).get(2));
-                    String year_local = (String) (((ArrayList<String>) pair.getValue()).get(3));
-                    String student_id_local = (String) pair.getKey();
-//                    name_int_pair.put(time, name);
-                    ArrayList<String> arrayList = new ArrayList<String>();
-                    arrayList.add(student_id_local);
-                    arrayList.add(name);
-                    arrayList.add(class_local);
-                    arrayList.add(year_local);
-                    score_keyed_data.put(time, arrayList);
-                }
-//                Map<Integer, String> sortedMap = new TreeMap<Integer, String>(name_int_pair);
-                Map<Integer, ArrayList<String>> sortedMap = new TreeMap<>(score_keyed_data);
-                iterator = sortedMap.entrySet().iterator();
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.set(Calendar.MINUTE, 0);
-                cal.set(Calendar.SECOND, 0);
-                cal.set(Calendar.MILLISECOND, 0);
-                cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-                long start_of_week_milli = cal.getTimeInMillis();
-                cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.set(Calendar.MINUTE, 0);
-                cal.set(Calendar.SECOND, 0);
-                cal.set(Calendar.MILLISECOND, 0);
-                long current_day_milli = cal.getTimeInMillis();
-                long different = current_day_milli - start_of_week_milli;
-                float daysBetween = (different / (1000*60*60*24)) + 1;
-                int daysNeeded = (int) daysBetween;
-                int i = 0;
-                while (iterator.hasNext()) {
-                    i ++;
-                    Map.Entry pair = (Map.Entry) iterator.next();
-                    String name = (String) ((ArrayList<String>) pair.getValue()).get(1);
-                    String student_id_local = (String) ((ArrayList<String>) pair.getValue()).get(0);
-                    String class_local = (String) ((ArrayList<String>) pair.getValue()).get(2);
-                    String year_local = (String) ((ArrayList<String>) pair.getValue()).get(3);
-                    Integer time = (Integer) pair.getKey();
-                    Integer count = data_map_count.get(student_id_local);
-                    if (!(count == daysNeeded)) {
-                        name = name + "*";
-                    }
-                    createCard(linearLayout, i, name, time, class_local.toUpperCase()+" (YEAR "+year_local+")");
-                }
+                createCard(linearLayout, 1, "SNAPCHAT", snapchat_total, "SOCIAL MEDIA");
+                createCard(linearLayout, 2, "INSTAGRAM", instagram_total, "SOCIAL MEDIA");
+                createCard(linearLayout, 3, "YOUTUBE", youtube_total, "ENTERTAINMENT");
+                createCard(linearLayout, 4, "WHATSAPP", whatsapp_total, "SOCIAL MEDIA");
+                createCard(linearLayout, 5, "TWITTER", twitter_total, "SOCIAL MEDIA");
+                createCard(linearLayout, 6, "TIKTOK", tiktok_total, "ENTERTAINMENT");
+                createCard(linearLayout, 7, "FACEBOOK", facebook_total, "SOCIAL MEDIA");
+//                Iterator iterator = data_map.entrySet().iterator();
+//                while (iterator.hasNext()) {
+//                    Map.Entry pair = (Map.Entry) iterator.next();
+//                    String name = (String) ((ArrayList<String>) pair.getValue()).get(0);
+//                    Integer time = Integer.parseInt(((ArrayList<String>) pair.getValue()).get(1));
+//                    String student_id_local = (String) pair.getKey();
+////                    name_int_pair.put(time, name);
+//                    ArrayList<String> arrayList = new ArrayList<String>();
+//                    arrayList.add(student_id_local);
+//                    arrayList.add(name);
+//                    score_keyed_data.put(time, arrayList);
+//                }
+////                Map<Integer, String> sortedMap = new TreeMap<Integer, String>(name_int_pair);
+//                Map<Integer, ArrayList<String>> sortedMap = new TreeMap<>(score_keyed_data);
+//                iterator = sortedMap.entrySet().iterator();
+//                Calendar cal = Calendar.getInstance();
+//                cal.set(Calendar.HOUR_OF_DAY, 0);
+//                cal.set(Calendar.MINUTE, 0);
+//                cal.set(Calendar.SECOND, 0);
+//                cal.set(Calendar.MILLISECOND, 0);
+//                cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+//                long start_of_week_milli = cal.getTimeInMillis();
+//                cal = Calendar.getInstance();
+//                cal.set(Calendar.HOUR_OF_DAY, 0);
+//                cal.set(Calendar.MINUTE, 0);
+//                cal.set(Calendar.SECOND, 0);
+//                cal.set(Calendar.MILLISECOND, 0);
+//                long current_day_milli = cal.getTimeInMillis();
+//                long different = current_day_milli - start_of_week_milli;
+//                float daysBetween = (different / (1000*60*60*24)) + 1;
+//                int daysNeeded = (int) daysBetween;
+//                int i = 0;
+//                while (iterator.hasNext()) {
+//                    i ++;
+//                    Map.Entry pair = (Map.Entry) iterator.next();
+//                    String name = (String) ((ArrayList<String>) pair.getValue()).get(1);
+//                    String student_id_local = (String) ((ArrayList<String>) pair.getValue()).get(0);
+//                    Integer time = (Integer) pair.getKey();
+//                    Integer count = data_map_count.get(student_id_local);
+//                    if (!(count == daysNeeded)) {
+//                        name = name + "*";
+//                    }
+//                    createCard(linearLayout, i, name, time, class_.toUpperCase()+" (YEAR "+year_group+")");
+//                }
 //                iterator = data_map.entrySet().iterator();
 //                int i = 0;
 //                while (iterator.hasNext()) {
@@ -269,7 +268,7 @@ public class FragmentSchoolWeekly extends Fragment {
         }
     }
 
-    public FragmentSchoolWeekly() {
+    public FragmentSelfWeekly() {
         // Required empty public constructor
     }
 
@@ -282,9 +281,9 @@ public class FragmentSchoolWeekly extends Fragment {
      * @return A new instance of fragment FragmentClassWeekly.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentSchoolWeekly newInstance(String param1, String param2) {
+    public static FragmentSelfWeekly newInstance(String param1, String param2) {
         Log.d("NEWINSTANCE", "CALLED");
-        FragmentSchoolWeekly fragment = new FragmentSchoolWeekly();
+        FragmentSelfWeekly fragment = new FragmentSelfWeekly();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -295,6 +294,7 @@ public class FragmentSchoolWeekly extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         Log.d("ONCREATE", "CALLED");
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -308,14 +308,14 @@ public class FragmentSchoolWeekly extends Fragment {
         school_name = sharedPreferences.getString("school_name", "null");
         class_ = sharedPreferences.getString("class", "null");
         year_group = sharedPreferences.getString("year", "null");
-        new AsyncTask().execute(getResources().getString(R.string.domain) + "get_weekly_leaderboard_school.php?school_id=" + school_id);
+        new AsyncTask().execute(getResources().getString(R.string.domain) + "get_weekly_leaderboard_self.php?id=" + id);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_school_weekly, container, false);
+        view = inflater.inflate(R.layout.fragment_self_weekly, container, false);
         Log.d("ONCREATEVIEW", "CALLED");
 //        sharedPreferences = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
 //        id = sharedPreferences.getString("login_id", "null");
@@ -325,8 +325,7 @@ public class FragmentSchoolWeekly extends Fragment {
 //        school_name = sharedPreferences.getString("school_name", "null");
 //        class_ = sharedPreferences.getString("class", "null");
 //        year_group = sharedPreferences.getString("year", "null");
-//        new AsyncTask().execute(getResources().getString(R.string.domain) + "get_weekly_leaderboard_year.php?class=" + class_+ "&school_id=" + school_id);
-//        new AsyncTask().execute(getResources().getString(R.string.domain) + "get_weekly_leaderboard_year.php?class=" + class_+ "&school_id=" + school_id);
+//        new AsyncTask().execute(getResources().getString(R.string.domain) + "get_weekly_leaderboard.php?class=" + class_+ "&school_id=" + school_id);
         return view;
     }
 
@@ -348,19 +347,44 @@ public class FragmentSchoolWeekly extends Fragment {
         mainLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
         cardView.addView(mainLinearLayout);
         // Create position TextView
-        TextView positionText = new TextView(getContext());
+        ImageView positionText = new ImageView(getContext());
         LinearLayout.LayoutParams positionTextLayoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
-//        positionTextLayoutParams.gravity = Gravity.CENTER;
-        positionText.setGravity(Gravity.CENTER);
-        positionTextLayoutParams.weight = 0.2f;
+        positionTextLayoutParams.gravity = Gravity.CENTER;
+//        positionText.setGravity(Gravity.CENTER);
+        positionTextLayoutParams.weight = 0.3f;
         positionText.setLayoutParams(positionTextLayoutParams);
 //        positionText.setTypeface(ResourcesCompat.getFont(getContext(), R.font.fredoka_one));
         positionText.setPadding(0, getDP(20), 0, getDP(20));
-        positionText.setText(position.toString());
-        positionText.setTextColor(getResources().getColor(R.color.blue));
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(positionText, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            positionText.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+//        positionText.setText(position.toString());
+//        positionText.setTextColor(getResources().getColor(R.color.blue));
+//        TextViewCompat.setAutoSizeTextTypeWithDefaults(positionText, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            positionText.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+//        }
+        switch (name) {
+            case "SNAPCHAT":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.snapchat_logo));
+                break;
+            case "INSTAGRAM":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.instagram_icon));
+                positionText.setPadding(0, getDP(12), 0, getDP(12));
+                break;
+            case "YOUTUBE":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.youtube_icon));
+                positionText.setPadding(0, getDP(25), 0, getDP(25));
+                break;
+            case "WHATSAPP":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.whatsapp_icon));
+                positionText.setPadding(0, getDP(13), 0, getDP(13));
+                break;
+            case "TWITTER":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.twitter_logo));
+                break;
+            case "TIKTOK":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.tiktok_icon));
+                break;
+            case "FACEBOOK":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.facebook_logo));
         }
         mainLinearLayout.addView(positionText);
         // Create name and class LinearLayout
@@ -402,7 +426,7 @@ public class FragmentSchoolWeekly extends Fragment {
         // Create points TextView
         TextView pointsText = new TextView(getContext());
         LinearLayout.LayoutParams pointsTextLayoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        pointsTextLayoutParams.gravity = Gravity.CENTER;
+        pointsTextLayoutParams.gravity = Gravity.CENTER;
         pointsTextLayoutParams.weight = 0.3f;
         pointsText.setGravity(Gravity.CENTER);
 //        pointsText.setTypeface(ResourcesCompat.getFont(getContext(), R.font.fredoka_one));

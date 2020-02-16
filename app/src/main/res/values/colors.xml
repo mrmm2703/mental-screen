@@ -8,4 +8,5 @@
     <color name="purple">#7D6B91</color>
     <color name="grey">#403F4C</color>
     <color name="subgrey">#E4E4E4</color>
+    <color name="tabs_selected">#9AB5DF</color>
 </resources>

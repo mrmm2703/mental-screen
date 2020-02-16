@@ -1,4 +1,4 @@
-package com.morahman.mentalscreen.ui.home;
+package com.morahman.mentalscreen.ui.self;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,26 +13,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-import com.morahman.mentalscreen.FragmentClassDaily;
 import com.morahman.mentalscreen.R;
 import com.morahman.mentalscreen.ui.main.SectionsPagerAdapter;
+import com.morahman.mentalscreen.ui.main.SectionsPagerAdapterSelf;
 
-import java.util.List;
-
-public class HomeFragment extends Fragment {
+public class SelfFragment extends Fragment {
     SharedPreferences sharedPreferences;
     String id;
     String class_;
     Fragment nav_host_fragment;
     View root;
 //    private HomeViewModel homeViewModel;
-    SectionsPagerAdapter sectionsPagerAdapter = null;
+    SectionsPagerAdapterSelf sectionsPagerAdapter = null;
 
 
     @Override
@@ -51,7 +46,7 @@ public class HomeFragment extends Fragment {
         sharedPreferences = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         class_ = sharedPreferences.getString("class", "null");
         id = sharedPreferences.getString("class", null);
-        sectionsPagerAdapter = new SectionsPagerAdapter(getContext(), getFragmentManager());
+        sectionsPagerAdapter = new SectionsPagerAdapterSelf(getContext(), getFragmentManager());
 
         ConstraintLayout fragment_parent = root.findViewById(R.id.fragment_class_constraint_layout);
         fragment_parent.removeAllViews();

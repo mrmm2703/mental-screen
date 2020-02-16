@@ -24,6 +24,10 @@
     <item android:title="LEADERBOARDS">
         <menu>
             <item
+                android:id="@+id/nav_self"
+                android:icon="@drawable/menu_myself"
+                android:title="MYSELF" />
+            <item
                 android:id="@+id/nav_home"
                 android:icon="@drawable/menu_class"
                 android:title="CLASS" />

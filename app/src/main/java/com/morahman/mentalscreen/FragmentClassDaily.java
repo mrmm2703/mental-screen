@@ -483,7 +483,7 @@ public class FragmentClassDaily extends Fragment {
         TextView pointsText = new TextView(getContext());
         LinearLayout.LayoutParams pointsTextLayoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
 //        pointsTextLayoutParams.gravity = Gravity.CENTER;
-        pointsTextLayoutParams.weight = 0.2f;
+        pointsTextLayoutParams.weight = 0.3f;
         pointsText.setGravity(Gravity.CENTER);
 //        pointsText.setTypeface(ResourcesCompat.getFont(getContext(), R.font.fredoka_one));
         pointsText.setTextColor(getResources().getColor(R.color.blue));
