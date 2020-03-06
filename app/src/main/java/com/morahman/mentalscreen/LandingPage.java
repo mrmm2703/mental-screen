@@ -9,11 +9,23 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class LandingPage extends AppCompatActivity {
     String id;
@@ -36,42 +48,7 @@ public class LandingPage extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (id == null) {
-            LandingPage.this.startActivity(new Intent(LandingPage.this, EnterSchool.class));
-        } else {
-            if (!isAccessGranted()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(LandingPage.this);
-                builder.setMessage("App needs usage access to work. Press OK to open settings and enable usage access to Mental Screen.");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                        startActivity(intent);
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finishAffinity();
-                    }
-                });
-                builder.create().show();
-            } else {
-                if (!isNetworkAvailable()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LandingPage.this);
-                    builder.setMessage("App needs internet access to work.");
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finishAffinity();
-                        }
-                    });
-                    builder.create().show();
-                } else {
-                    LandingPage.this.startActivity(new Intent(LandingPage.this, LandingHome.class));
-                }
-            }
-        }
+        new AsyncTask().execute();
     }
 
     private boolean isAccessGranted() {
@@ -85,6 +62,119 @@ public class LandingPage extends AppCompatActivity {
 
         } catch (PackageManager.NameNotFoundException e) {
             return false;
+        }
+    }
+
+    private class AsyncTask extends android.os.AsyncTask<String, String, String> {
+        protected void onPreExecute() { }
+
+        protected String doInBackground(String... paramgs) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL(getResources().getString(R.string.domain) + "latest_version.php");
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer buffer = new StringBuffer();
+                String line = "";
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line+"\n");
+                }
+
+                return buffer.toString();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.d("VERSION", result);
+            try {
+                PackageInfo pInfo = getApplicationContext().getPackageManager().getPackageInfo(getPackageName(), 0);
+                String version = pInfo.versionName;
+                final float server_version = Float.parseFloat(result);
+                float local_version = Float.parseFloat(version);
+                if (!(Float.compare(server_version, local_version) == 0)) {
+                    Log.d("VERSION", "DIFFERENT");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LandingPage.this);
+                    builder.setMessage("New update available. Press continue to download new update.");
+                    builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.domain) + "packages/" + String.valueOf(server_version) + ".apk"));
+                            LandingPage.this.startActivity(browserIntent);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finishAffinity();
+                        }
+                    });
+                    builder.create().show();
+                } else {
+                    if (id == null) {
+                        LandingPage.this.startActivity(new Intent(LandingPage.this, EnterSchool.class));
+                    } else {
+                        if (!isAccessGranted()) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LandingPage.this);
+                            builder.setMessage("App needs usage access to work. Press OK to open settings and enable usage access to Mental Screen.");
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                                    startActivity(intent);
+                                }
+                            });
+                            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finishAffinity();
+                                }
+                            });
+                            builder.create().show();
+                        } else {
+                            if (!isNetworkAvailable()) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(LandingPage.this);
+                                builder.setMessage("App needs internet access to work.");
+                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finishAffinity();
+                                    }
+                                });
+                                builder.create().show();
+                            } else {
+                                LandingPage.this.startActivity(new Intent(LandingPage.this, LandingHome.class));
+                            }
+                        }
+                    }
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

@@ -371,8 +371,13 @@ public class FragmentClassDaily extends Fragment {
                         String student_id_json = jsonObject.getString("student_id");
                         String class_ = jsonObject.getString("class");
                         String year = jsonObject.getString("year_group");
+                        String solo = jsonObject.getString("solo");
 //                        LinearLayout parent = new LinearLayout(getContext());
-                        createCard(linearLayout, i+1, first_name_json+" "+last_name_json, Integer.parseInt(screen_time_minutes_json), class_+" (YEAR "+year+")");
+                        if (solo.equals("0")) {
+                            createCard(linearLayout, i+1, first_name_json+" "+last_name_json, Integer.parseInt(screen_time_minutes_json), class_+" (YEAR "+year+")");
+                        } else {
+                            createCard(linearLayout, i+1, first_name_json+" "+last_name_json, Integer.parseInt(screen_time_minutes_json), "SOLO"+" (YEAR "+year+")");
+                        }
 //                        int pixels = (int) (40 * getContext().getResources().getDisplayMetrics().density);
 //                        parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, pixels));
 //                        parent.setOrientation(LinearLayout.HORIZONTAL);
@@ -403,7 +408,7 @@ public class FragmentClassDaily extends Fragment {
 //                        linearLayout.addView(parent);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Snackbar.make(view.findViewById(R.id.enter_school_relative_layout), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view.findViewById(R.id.fragment_class_daily_parent), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
                     }
                 }
             }

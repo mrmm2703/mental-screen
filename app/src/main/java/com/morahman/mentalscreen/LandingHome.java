@@ -81,26 +81,26 @@ public class LandingHome extends AppCompatActivity {
         navClass.setText(class_.toUpperCase() + " (YEAR " + year_group + ")");
         TextView navSchool = headerView.findViewById(R.id.nav_school);
         navSchool.setText(school_name.toUpperCase());
-//        final LinearLayout navParent = headerView.findViewById(R.id.nav_parent);
-        NavHeaderImageLayout navHeaderImageLayout = headerView.findViewById(R.id.nav_parent);
-        Picasso.get().load(getResources().getString(R.string.domain) + "school_logos/" + school_id + ".png").into(navHeaderImageLayout);
-//        Picasso.get().load(getResources().getString(R.string.domain) + "school_logos/" + school_id + ".png").into(new Target() {
-//            @Override
-//            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                navParent.setBackground(new BitmapDrawable(bitmap));
-//
-//            }
-//
-//            @Override
-//            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-//
-//            }
-//
-//            @Override
-//            public void onPrepareLoad(Drawable placeholderDrawable) {
-//
-//            }
-//        });
+        final LinearLayout navParent = headerView.findViewById(R.id.nav_parent);
+//        NavHeaderImageLayout navHeaderImageLayout = headerView.findViewById(R.id.nav_parent);
+//        Picasso.get().load(getResources().getString(R.string.domain) + "school_logos/" + school_id + ".png").into(navHeaderImageLayout);
+        Picasso.get().load(getResources().getString(R.string.domain) + "school_logos/" + school_id + ".png").into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                navParent.setBackground(new BitmapDrawable(bitmap));
+
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeholderDrawable) {
+
+            }
+        });
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(

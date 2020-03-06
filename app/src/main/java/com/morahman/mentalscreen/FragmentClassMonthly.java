@@ -236,6 +236,7 @@ public class FragmentClassMonthly extends Fragment {
                         String last_name_json = jsonObject.getString("last_name");
                         String screen_time_minutes_json = jsonObject.getString("screen_time_minutes");
                         String student_id_json = jsonObject.getString("student_id");
+                        String solo_json = jsonObject.getString("solo");
                         if (data_map.containsKey(student_id_json)) {
                             String existing_name = data_map.get(student_id_json).get(0);
                             Integer existing_time = Integer.parseInt(data_map.get(student_id_json).get(1));
@@ -243,6 +244,7 @@ public class FragmentClassMonthly extends Fragment {
                             ArrayList<String> arrayList = new ArrayList<>();
                             arrayList.add(existing_name);
                             arrayList.add(new_time.toString());
+                            arrayList.add(solo_json);
                             data_map.put(student_id_json, arrayList);
                             Integer current_count = data_map_count.get(student_id_json);
                             data_map_count.put(student_id_json, current_count+1);
@@ -251,6 +253,7 @@ public class FragmentClassMonthly extends Fragment {
                             ArrayList<String> arrayList = new ArrayList<>();
                             arrayList.add(new_name);
                             arrayList.add(screen_time_minutes_json);
+                            arrayList.add(solo_json);
                             data_map.put(student_id_json, arrayList);
                             data_map_count.put(student_id_json, 1);
                         }
@@ -264,11 +267,13 @@ public class FragmentClassMonthly extends Fragment {
                     Map.Entry pair = (Map.Entry) iterator.next();
                     String name = (String) ((ArrayList<String>) pair.getValue()).get(0);
                     Integer time = Integer.parseInt(((ArrayList<String>) pair.getValue()).get(1));
+                    String solo = ((ArrayList<String>) pair.getValue()).get(2);
                     String student_id_local = (String) pair.getKey();
 //                    name_int_pair.put(time, name);
                     ArrayList<String> arrayList = new ArrayList<String>();
                     arrayList.add(student_id_local);
                     arrayList.add(name);
+                    arrayList.add(solo);
                     score_keyed_data.put(time, arrayList);
                 }
                 Map<Integer, ArrayList<String>> sortedMap = new TreeMap<>(score_keyed_data);
@@ -281,6 +286,7 @@ public class FragmentClassMonthly extends Fragment {
                     i ++;
                     Map.Entry pair = (Map.Entry) iterator.next();
                     String name = (String) ((ArrayList<String>) pair.getValue()).get(1);
+                    String solo = ((ArrayList<String>) pair.getValue()).get(2);
                     Integer time = (Integer) pair.getKey();
                     Integer count = data_map_count.get(((ArrayList<String>) pair.getValue()).get(0));
                     Log.d("MONTHLY", "USER: " + name);
@@ -288,7 +294,11 @@ public class FragmentClassMonthly extends Fragment {
                     if (!(count == daysNeeded)) {
                         name = name + "*";
                     }
-                    createCard(linearLayout, i, name, time, class_.toUpperCase() + " (YEAR " + year_group + ")");
+                    if (solo.equals("0")) {
+                        createCard(linearLayout, i, name, time, class_.toUpperCase() + " (YEAR " + year_group + ")");
+                    } else {
+                        createCard(linearLayout, i, name, time, "SOLO" + " (YEAR " + year_group + ")");
+                    }
 //                    LinearLayout parent = new LinearLayout(getContext());
 //                    int pixels = (int) (40 * getContext().getResources().getDisplayMetrics().density);
 //                    parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, pixels));
