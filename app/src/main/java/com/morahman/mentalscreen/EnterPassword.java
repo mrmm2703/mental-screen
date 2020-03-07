@@ -33,6 +33,8 @@ public class EnterPassword extends AppCompatActivity {
     String id;
     String class_;
     String year;
+    String class_id;
+    String solo;
     EditText password_entry;
     ProgressDialog pd;
     JSONArray json;
@@ -50,6 +52,8 @@ public class EnterPassword extends AppCompatActivity {
         id = getIntent().getStringExtra("id");
         year = getIntent().getStringExtra("year");
         class_ = getIntent().getStringExtra("class");
+        solo = getIntent().getStringExtra("solo");
+        class_id = getIntent().getStringExtra("class_id");
         Log.d("ENTERPASSWORD", "Initial ID: " + id);
         password_entry = findViewById(R.id.enter_password_password);
         Snackbar.make(findViewById(R.id.enter_password_relative_layout), "Hey there " + first_name + "!", Snackbar.LENGTH_SHORT).show();
@@ -149,6 +153,8 @@ public class EnterPassword extends AppCompatActivity {
                 editor.putString("year", year);
                 editor.putString("school_name",school_name);
                 editor.putString("school_id", school_id);
+                editor.putString("solo", solo);
+                editor.putString("class_id", class_id);
                 editor.apply();
                 EnterPassword.this.startActivity(new Intent(EnterPassword.this, LandingPage.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             }

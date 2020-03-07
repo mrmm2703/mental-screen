@@ -52,6 +52,7 @@
         <activity android:name=".SignUpName" />
         <activity android:name=".SignUpClass" />
         <activity android:name=".SignUpPassword" />
+        <activity android:name=".SignUpCreateClass" />
         <activity android:name=".LandingHomeDaily">
 
             <!-- <intent-filter> -->

@@ -27,6 +27,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.pusher.pushnotifications.PushNotifications;
+
 public class LandingPage extends AppCompatActivity {
     String id;
     SharedPreferences sharedPreferences;
@@ -35,7 +37,7 @@ public class LandingPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
         sharedPreferences = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
-        id = sharedPreferences.getString("class", null);
+        id = sharedPreferences.getString("login_id", null);
     }
 
     private boolean isNetworkAvailable() {
@@ -48,7 +50,75 @@ public class LandingPage extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new AsyncTask().execute();
+        if (!isNetworkAvailable()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(LandingPage.this);
+            builder.setMessage("App needs internet access to work.");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finishAffinity();
+                }
+            });
+            builder.create().show();
+        } else {
+            PushNotifications.start(getApplicationContext(), "bf463df6-f25a-40d9-9bd9-6b92dc82d63e");
+            PushNotifications.clearDeviceInterests();
+            PushNotifications.addDeviceInterest("everyone");
+            if (id == null) {
+                LandingPage.this.startActivity(new Intent(LandingPage.this, EnterSchool.class));
+                PushNotifications.addDeviceInterest("loggedin=false");
+            } else {
+                if (!isAccessGranted()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LandingPage.this);
+                    builder.setMessage("App needs usage access to work. Press OK to open settings and enable usage access to Mental Screen.");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                            startActivity(intent);
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finishAffinity();
+                        }
+                    });
+                    builder.create().show();
+                } else {
+                    if (!isNetworkAvailable()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LandingPage.this);
+                        builder.setMessage("App needs internet access to work.");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finishAffinity();
+                            }
+                        });
+                        builder.create().show();
+                    } else {
+                        new AsyncTask().execute();
+                        String class_ = sharedPreferences.getString("class", "NULL");
+                        String year = sharedPreferences.getString("year", "NULL");
+                        String school_name = sharedPreferences.getString("school_name", "NULL");
+                        String school_id = sharedPreferences.getString("school_id", "NULL");
+                        String solo = sharedPreferences.getString("solo", "NULL");
+                        String class_id = sharedPreferences.getString("class_id", "NULL");
+                        if (solo.equals("1")) {
+                            PushNotifications.addDeviceInterest("solo=true");
+                        } else {
+                            PushNotifications.addDeviceInterest("solo=false");
+                        }
+                        PushNotifications.addDeviceInterest("studentid="+id);
+                        PushNotifications.addDeviceInterest("classid="+class_id);
+                        PushNotifications.addDeviceInterest("year="+year);
+//                        PushNotifications.addDeviceInterest("schoolname="+school_name);
+                        PushNotifications.addDeviceInterest("schoolid="+school_id);
+                        PushNotifications.addDeviceInterest("loggedin=true");
+                    }
+                }
+            }
+        }
     }
 
     private boolean isAccessGranted() {
@@ -122,6 +192,7 @@ public class LandingPage extends AppCompatActivity {
                     builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Log.d("UPDATE", getResources().getString(R.string.domain) + "packages/" + String.valueOf(server_version) + ".apk");
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.domain) + "packages/" + String.valueOf(server_version) + ".apk"));
                             LandingPage.this.startActivity(browserIntent);
                         }
@@ -134,42 +205,7 @@ public class LandingPage extends AppCompatActivity {
                     });
                     builder.create().show();
                 } else {
-                    if (id == null) {
-                        LandingPage.this.startActivity(new Intent(LandingPage.this, EnterSchool.class));
-                    } else {
-                        if (!isAccessGranted()) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(LandingPage.this);
-                            builder.setMessage("App needs usage access to work. Press OK to open settings and enable usage access to Mental Screen.");
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                                    startActivity(intent);
-                                }
-                            });
-                            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finishAffinity();
-                                }
-                            });
-                            builder.create().show();
-                        } else {
-                            if (!isNetworkAvailable()) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(LandingPage.this);
-                                builder.setMessage("App needs internet access to work.");
-                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        finishAffinity();
-                                    }
-                                });
-                                builder.create().show();
-                            } else {
-                                LandingPage.this.startActivity(new Intent(LandingPage.this, LandingHome.class));
-                            }
-                        }
-                    }
+                    LandingPage.this.startActivity(new Intent(LandingPage.this, LandingHome.class));
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();

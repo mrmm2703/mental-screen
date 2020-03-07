@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
@@ -39,8 +42,12 @@ public class SignUpClass extends AppCompatActivity {
     String last_name;
     ProgressDialog pd;
     JSONArray json;
-    Spinner class_spinner;
+    EditText class_code;
+    TextView classcode_text;
+    Switch solo_switch;
+    String class_;
     EditText year_entry;
+    String solo = "0";
     List<String> spinner_choices = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,30 +55,67 @@ public class SignUpClass extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_sign_up_class);
+        classcode_text = findViewById(R.id.sign_up_class_classcode_text);
+        class_code = findViewById(R.id.sign_up_class_classcode);
+        solo_switch = findViewById(R.id.sign_up_class_solo_switch);
+        solo_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    solo = "1";
+                    classcode_text.setVisibility(View.GONE);
+                    class_code.setVisibility(View.GONE);
+                } else {
+                    solo = "0";
+                    classcode_text.setVisibility(View.VISIBLE);
+                    class_code.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         school_name = getIntent().getStringExtra("school_name");
         school_id = getIntent().getStringExtra("school_id");
         email = getIntent().getStringExtra("email");
         first_name = getIntent().getStringExtra("first_name");
         last_name = getIntent().getStringExtra("last_name");
-        class_spinner = findViewById(R.id.sign_up_class_spinner);
         year_entry = findViewById(R.id.sign_up_class_year);
-        new AsyncTask().execute(getResources().getString(R.string.domain) + "get_classes.php?school_id=" + school_id);
+        if (getIntent().hasExtra("classcode")) {
+            class_code.setText(getIntent().getStringExtra("classcode"));
+        }
+//        new AsyncTask().execute(getResources().getString(R.string.domain) + "get_classes.php?school_id=" + school_id);
     }
 
     public void fab_click(View view) {
         if (year_entry.getText().toString().length() == 0 || Integer.valueOf(year_entry.getText().toString()) < 7 || Integer.valueOf(year_entry.getText().toString()) > 13) {
             Snackbar.make(findViewById(R.id.sign_up_class_relative_layout), "Enter a valid year group", Snackbar.LENGTH_SHORT).show();
         } else {
-            Intent myIntent = new Intent(SignUpClass.this, SignUpPassword.class);
-            myIntent.putExtra("school_id", school_id);
-            myIntent.putExtra("school_name", school_name);
-            myIntent.putExtra("email", email);
-            myIntent.putExtra("first_name", first_name);
-            myIntent.putExtra("last_name", last_name);
-            myIntent.putExtra("year", year_entry.getText().toString());
-            myIntent.putExtra("class", class_spinner.getSelectedItem().toString());
-            SignUpClass.this.startActivity(myIntent);
+            if (solo.equals("0")) {
+                new AsyncTask().execute(getResources().getString(R.string.domain) + "get_classes.php?school_id=" + school_id + "&passcode=" + class_code.getText().toString());
+            } else {
+                Intent myIntent = new Intent(SignUpClass.this, SignUpPassword.class);
+                myIntent.putExtra("school_id", school_id);
+                myIntent.putExtra("school_name", school_name);
+                myIntent.putExtra("email", email);
+                myIntent.putExtra("first_name", first_name);
+                myIntent.putExtra("last_name", last_name);
+                myIntent.putExtra("year", year_entry.getText().toString());
+                myIntent.putExtra("class", "SOLO");
+                myIntent.putExtra("solo", solo);
+                SignUpClass.this.startActivity(myIntent);
+            }
         }
+    }
+
+    public void create_class(View view) {
+        Intent myIntent = new Intent(SignUpClass.this, SignUpCreateClass.class);
+        myIntent.putExtra("school_id", school_id);
+        myIntent.putExtra("school_name", school_name);
+        myIntent.putExtra("email", email);
+        myIntent.putExtra("first_name", first_name);
+        myIntent.putExtra("last_name", last_name);
+//        myIntent.putExtra("year", year_entry.getText().toString());
+//        myIntent.putExtra("class", "SOLO");
+        myIntent.putExtra("solo", "0");
+        SignUpClass.this.startActivity(myIntent);
     }
 
     private class AsyncTask extends android.os.AsyncTask<String, String, String> {
@@ -126,7 +170,7 @@ public class SignUpClass extends AppCompatActivity {
             super.onPostExecute(result);
             Log.d("TTT", result);
             if (result.equals("No classes found, contact admin\n")) {
-                 Snackbar.make(findViewById(R.id.sign_up_class_relative_layout), "Email not found", Snackbar.LENGTH_SHORT).show();
+                 Snackbar.make(findViewById(R.id.sign_up_class_relative_layout), "Class code entered is invalid.", Snackbar.LENGTH_SHORT).show();
                 if (pd.isShowing()) {
                     pd.dismiss();
                 }
@@ -137,45 +181,66 @@ public class SignUpClass extends AppCompatActivity {
                     pd.dismiss();
                 }
                 return;
-            }
-            try {
-                json = new JSONArray(result);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Snackbar.make(findViewById(R.id.sign_up_class_relative_layout), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
-                if (pd.isShowing()) {
-                    pd.dismiss();
-                }
-                return;
-            }
-            String id = "";
-            for (int i=0; i < json.length(); i++) {
+            } else {
                 try {
-                    JSONObject jsonObject = json.getJSONObject(i);
-                    if (first_run) {
-                        spinner_choices.add(jsonObject.getString("class_name"));
-                    } else {
-
+                    json = new JSONArray(result);
+                    for (int i=0; i < json.length(); i++) {
+                        try {
+                            JSONObject jsonObject = json.getJSONObject(i);
+                            class_ = jsonObject.getString("class_name");
+                            String class_id = jsonObject.getString("id");
+                            Intent myIntent = new Intent(SignUpClass.this, SignUpPassword.class);
+                            myIntent.putExtra("school_id", school_id);
+                            myIntent.putExtra("school_name", school_name);
+                            myIntent.putExtra("email", email);
+                            myIntent.putExtra("first_name", first_name);
+                            myIntent.putExtra("last_name", last_name);
+                            myIntent.putExtra("year", year_entry.getText().toString());
+                            myIntent.putExtra("class", class_);
+                            myIntent.putExtra("solo", solo);
+                            myIntent.putExtra("class_id", class_id);
+                            SignUpClass.this.startActivity(myIntent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Snackbar.make(findViewById(R.id.sign_up_class_relative_layout), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.sign_up_class_relative_layout), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
                     if (pd.isShowing()) {
                         pd.dismiss();
                     }
+                    return;
                 }
             }
-
-            if (first_run) {
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                        getApplicationContext(),
-                        android.R.layout.simple_spinner_item,
-                        spinner_choices
-                );
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                class_spinner.setAdapter(adapter);
-            }
+//            String id = "";
+//            for (int i=0; i < json.length(); i++) {
+//                try {
+//                    JSONObject jsonObject = json.getJSONObject(i);
+//                    if (first_run) {
+//                        spinner_choices.add(jsonObject.getString("class_name"));
+//                    } else {
+//
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Snackbar.make(findViewById(R.id.sign_up_class_relative_layout), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
+//                    if (pd.isShowing()) {
+//                        pd.dismiss();
+//                    }
+//                }
+//            }
+//
+//            if (first_run) {
+//                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+//                        getApplicationContext(),
+//                        android.R.layout.simple_spinner_item,
+//                        spinner_choices
+//                );
+//                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                class_spinner.setAdapter(adapter);
+//            }
 
             if (pd.isShowing()) {
                 pd.dismiss();

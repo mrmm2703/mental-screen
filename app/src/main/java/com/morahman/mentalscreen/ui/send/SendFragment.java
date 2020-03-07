@@ -16,7 +16,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.morahman.mentalscreen.EnterSchool;
+import com.morahman.mentalscreen.LandingPage;
 import com.morahman.mentalscreen.R;
+import com.pusher.pushnotifications.PushNotifications;
 
 public class SendFragment extends Fragment {
 
@@ -26,7 +28,8 @@ public class SendFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         sharedPreferences.edit().clear().apply();
-        getActivity().startActivity(new Intent(getActivity(), EnterSchool.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        PushNotifications.clearDeviceInterests();
+        getActivity().startActivity(new Intent(getActivity(), LandingPage.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 ViewModelProviders.of(this).get(SendViewModel.class);
         View root = inflater.inflate(R.layout.fragment_send, container, false);
 //        final TextView textView = root.findViewById(R.id.text_send);

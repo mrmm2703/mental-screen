@@ -36,6 +36,8 @@ public class SignUpPassword extends AppCompatActivity {
     String year;
     String first_name;
     String last_name;
+    String solo;
+    String class_id;
     JSONArray json;
     String id;
     @Override
@@ -51,7 +53,9 @@ public class SignUpPassword extends AppCompatActivity {
         first_name = getIntent().getStringExtra("first_name");
         last_name = getIntent().getStringExtra("last_name");
         class_ = getIntent().getStringExtra("class");
+        class_id = getIntent().getStringExtra("class_id");
         year = getIntent().getStringExtra("year");
+        solo = getIntent().getStringExtra("solo");
     }
 
     public void fab_click(View view) {
@@ -71,6 +75,8 @@ public class SignUpPassword extends AppCompatActivity {
                     + "&school_id=" + school_id
                     + "&school_name=" + school_name.replace("&", "!$4$!")
                     + "&year=" + year
+                    + "&solo=" + solo
+                    + "&class_id=" + class_id
                     + "&class=" + class_;
             new AsyncTask().execute(url);
         }
@@ -153,6 +159,7 @@ public class SignUpPassword extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = json.getJSONObject(i);
                     id = jsonObject.getString("id");
+                    String solo = jsonObject.getString("solo");
                     SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("login_id", id);
@@ -162,6 +169,8 @@ public class SignUpPassword extends AppCompatActivity {
                     editor.putString("year", year);
                     editor.putString("school_name",school_name);
                     editor.putString("school_id", school_id);
+                    editor.putString("solo", solo);
+                    editor.putString("class_id", class_id);
                     editor.apply();
                     Snackbar.make(findViewById(R.id.sign_up_password_relative_layout), "ID: " + id, Snackbar.LENGTH_SHORT).show();
                 } catch (JSONException e) {

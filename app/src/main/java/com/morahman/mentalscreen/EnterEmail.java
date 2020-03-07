@@ -167,8 +167,10 @@ public class EnterEmail extends AppCompatActivity {
                     String id = jsonObject.getString("id");
                     String year = jsonObject.getString("year_group");
                     String class_= jsonObject.getString("class");
-                    Log.d("ENTEREMAIL", "ID: " + id);
+                    String solo = jsonObject.getString("solo");
                     String last_name = jsonObject.getString("last_name");
+                    String class_id = jsonObject.getString("class_id");
+                    Log.d("ENTEREMAIL", "ID: " + id);
                     Snackbar.make(findViewById(R.id.enter_email_relative_layout), "Logged in: " + first_name + " " + last_name, Snackbar.LENGTH_SHORT).show();
                     Intent myIntent = new Intent(EnterEmail.this, EnterPassword.class);
                     myIntent.putExtra("school_id", school_id);
@@ -179,6 +181,8 @@ public class EnterEmail extends AppCompatActivity {
                     myIntent.putExtra("id", id);
                     myIntent.putExtra("year", year);
                     myIntent.putExtra("class", class_);
+                    myIntent.putExtra("solo", solo);
+                    myIntent.putExtra("class_id", class_id);
                     EnterEmail.this.startActivity(myIntent);
                 } catch (JSONException e) {
                     e.printStackTrace();

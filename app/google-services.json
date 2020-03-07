@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "972030028718",
+    "firebase_url": "https://mental-screen.firebaseio.com",
+    "project_id": "mental-screen",
+    "storage_bucket": "mental-screen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972030028718:android:13ec0f46de29d22cc9763f",
+        "android_client_info": {
+          "package_name": "com.morahman.mentalscreen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972030028718-i0d6k7pu71stb17196i8elei9imu4ip1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIEL2KtF1QzRZMIgRv8ky-3yZkprEkUwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972030028718-i0d6k7pu71stb17196i8elei9imu4ip1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

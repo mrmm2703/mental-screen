@@ -52,33 +52,75 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
-            android:fontFamily="@font/fredoka_one"
             android:backgroundTint="@color/grey"
             android:ems="10"
+            android:fontFamily="@font/fredoka_one"
             android:inputType="number"
             android:textSize="17sp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="50dp"
+                android:fontFamily="@font/fredoka_one"
+                android:text="Solo?"
+                android:textColor="@color/grey"
+                android:textSize="17sp" />
+
+            <Switch
+                android:id="@+id/sign_up_class_solo_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="50dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/fredoka_one" />
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/sign_up_class_classcode_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="50dp"
             android:fontFamily="@font/fredoka_one"
-            android:text="Choose your class:"
+            android:text="Enter your classcode:"
             android:textColor="@color/grey"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:visibility="visible" />
 
-        <Spinner
-            android:id="@+id/sign_up_class_spinner"
+        <EditText
+            android:id="@+id/sign_up_class_classcode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
             android:backgroundTint="@color/grey"
-            android:foregroundTint="@color/grey"
-            android:scrollbarSize="4dp" />
+            android:ems="10"
+            android:fontFamily="@font/fredoka_one"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/sign_up_class_create_class_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="50dp"
+            android:fontFamily="@font/fredoka_one"
+            android:onClick="create_class"
+            android:text="CREATE A CLASS"
+            android:textSize="15sp" />
 
     </LinearLayout>
 
