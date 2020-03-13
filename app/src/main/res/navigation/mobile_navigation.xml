@@ -8,8 +8,14 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.morahman.mentalscreen.ui.home.HomeFragment"
-        android:label="TEAM LEADERBOARD"
+        android:label="MY TEAM LEADERBOARD"
         tools:layout="@layout/fragment_class" />
+
+    <fragment
+        android:id="@+id/nav_prizes"
+        android:name="com.morahman.mentalscreen.ui.self.PrizesFragment"
+        android:label="COMPETITIONS"
+        tools:layout="@layout/fragment_prizes" />
 
     <fragment
         android:id="@+id/nav_refresh"
@@ -20,7 +26,7 @@
     <fragment
         android:id="@+id/nav_self"
         android:name="com.morahman.mentalscreen.ui.self.SelfFragment"
-        android:label="MYSELF"
+        android:label="MY USAGE"
         tools:layout="@layout/fragment_self" />
 
     <fragment

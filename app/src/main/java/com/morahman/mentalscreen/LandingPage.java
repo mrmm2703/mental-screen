@@ -27,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.pusher.pushnotifications.PushNotifications;
 
 public class LandingPage extends AppCompatActivity {
@@ -159,8 +160,10 @@ public class LandingPage extends AppCompatActivity {
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } catch (IOException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -171,6 +174,7 @@ public class LandingPage extends AppCompatActivity {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
             return null;
@@ -209,6 +213,7 @@ public class LandingPage extends AppCompatActivity {
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             }
 
         }

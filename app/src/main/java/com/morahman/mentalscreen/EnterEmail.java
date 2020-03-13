@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -95,8 +96,10 @@ public class EnterEmail extends AppCompatActivity {
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } catch (IOException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -107,6 +110,7 @@ public class EnterEmail extends AppCompatActivity {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
             return null;
@@ -154,6 +158,7 @@ public class EnterEmail extends AppCompatActivity {
                 json = new JSONArray(result);
             } catch (JSONException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                 Snackbar.make(findViewById(R.id.enter_email_relative_layout), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
                 if (pd.isShowing()) {
                     pd.dismiss();
@@ -186,6 +191,7 @@ public class EnterEmail extends AppCompatActivity {
                     EnterEmail.this.startActivity(myIntent);
                 } catch (JSONException e) {
                     e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                     Snackbar.make(findViewById(R.id.enter_email_relative_layout), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
                     if (pd.isShowing()) {
                         pd.dismiss();

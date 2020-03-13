@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,12 +41,12 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentGlobalDaily.OnFragmentInteractionListener} interface
+ * {@link FragmentPrizesPast.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentGlobalDaily#newInstance} factory method to
+ * Use the {@link FragmentPrizesPast#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentGlobalDaily extends Fragment {
+public class FragmentPrizesPast extends Fragment {
     JSONArray json;
     View view;
 
@@ -69,7 +70,7 @@ public class FragmentGlobalDaily extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentGlobalDaily() {
+    public FragmentPrizesPast() {
         // Required empty public constructor
     }
 
@@ -82,8 +83,8 @@ public class FragmentGlobalDaily extends Fragment {
      * @return A new instance of fragment FragmentClassDaily.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragmentGlobalDaily newInstance(String param1, String param2) {
-        FragmentGlobalDaily fragment = new FragmentGlobalDaily();
+    public static FragmentPrizesPast newInstance(String param1, String param2) {
+        FragmentPrizesPast fragment = new FragmentPrizesPast();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -94,12 +95,12 @@ public class FragmentGlobalDaily extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         Log.d("FragmentClassDaily", "onCreate called");
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        createUI();
     }
 
     public void createUI() {
@@ -112,19 +113,31 @@ public class FragmentGlobalDaily extends Fragment {
         class_ = sharedPreferences.getString("class", "null");
         year_group = sharedPreferences.getString("year", "null");
         usageStatsManager = (UsageStatsManager) getContext().getSystemService(Context.USAGE_STATS_SERVICE);
+//        FloatingActionButton fab = view.findViewById(R.id.fragment_self_daily_fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                LinearLayout linearLayout = view.findViewById(R.id.fragment_self_daily_linear_layout);
+//                linearLayout.removeAllViews();
+//                createUI();
+//            }
+//        });
 //        getAppTimesYesterday();
 //        getAppTimes();
-        new AsyncTask().execute(getResources().getString(R.string.domain) + "get_leaderboard_global.php?");
+        new AsyncTask().execute(getResources().getString(R.string.domain) + "get_leaderboard_self.php?id=" + id );
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_global_daily, container, false);
+        view = inflater.inflate(R.layout.fragment_self_daily, container, false);
         Log.d("FragmentClassDaily", "onCreateView called");
+        createUI();
         return view;
     }
+
+
 
     public void getAppTimesYesterday() {
         Log.d("YESTERDAY STATS", "YESTERDAY STATSSSSSSSSSSS");
@@ -336,18 +349,18 @@ FirebaseCrashlytics.getInstance().recordException(e);
             super.onPostExecute(result);
             Log.d("RRR", result);
             if (result.equals("No results found\n")) {
-                Snackbar.make(view.findViewById(R.id.fragment_global_daily_parent), "Updates times on server", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view.findViewById(R.id.fragment_self_daily_parent), "Updates times on server", Snackbar.LENGTH_SHORT).show();
             } else if (result.equals("Connection failed\n")) {
-                Snackbar.make(view.findViewById(R.id.fragment_global_daily_parent), "Error 1: Endpoint could not connect to MySQL server", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view.findViewById(R.id.fragment_self_daily_parent), "Error 1: Endpoint could not connect to MySQL server", Snackbar.LENGTH_SHORT).show();
             } else if (result.equals("1\n")) {
-//                Snackbar.make(view.findViewById(R.id.fragment_global_daily_parent), "Updated server with times", Snackbar.LENGTH_SHORT).show();
+//                Snackbar.make(view.findViewById(R.id.fragment_self_daily_parent), "Updated server with times", Snackbar.LENGTH_SHORT).show();
             } else {
                 try {
                     json = new JSONArray(result);
                 } catch (JSONException e) {
-                    Snackbar.make(view.findViewById(R.id.fragment_global_daily_parent), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view.findViewById(R.id.fragment_self_daily_parent), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
                 }
-                LinearLayout linearLayout = view.findViewById(R.id.fragment_global_daily_linear_layout);
+                LinearLayout linearLayout = view.findViewById(R.id.fragment_self_daily_linear_layout);
 //                linearLayout.removeAllViews();
                 for (int i=0; i < json.length(); i++) {
                     try {
@@ -356,11 +369,24 @@ FirebaseCrashlytics.getInstance().recordException(e);
                         String last_name_json = jsonObject.getString("last_name");
                         String screen_time_minutes_json = jsonObject.getString("screen_time_minutes");
                         String student_id_json = jsonObject.getString("student_id");
+                        String snapchat_time = jsonObject.getString("snapchat_minutes");
+                        String youtube_time = jsonObject.getString("youtube_minutes");
+                        String instagram_time = jsonObject.getString("instagram_minutes");
+                        String whatsapp_time = jsonObject.getString("whatsapp_minutes");
+                        String tiktok_time = jsonObject.getString("tiktok_minutes");
+                        String twitter_time = jsonObject.getString("twitter_minutes");
+                        String facebook_time = jsonObject.getString("facebook_minutes");
+                        createCard(linearLayout, 1, "SNAPCHAT", Integer.parseInt(snapchat_time), "SOCIAL MEDIA");
+                        createCard(linearLayout, 2, "INSTAGRAM", Integer.parseInt(instagram_time), "SOCIAL MEDIA");
+                        createCard(linearLayout, 3, "YOUTUBE", Integer.parseInt(youtube_time), "ENTERTAINMENT");
+                        createCard(linearLayout, 4, "WHATSAPP", Integer.parseInt(whatsapp_time), "SOCIAL MEDIA");
+                        createCard(linearLayout, 5, "TWITTER", Integer.parseInt(twitter_time), "SOCIAL MEDIA");
+                        createCard(linearLayout, 6, "TIKTOK", Integer.parseInt(tiktok_time), "ENTERTAINMENT");
+                        createCard(linearLayout, 7, "FACEBOOK", Integer.parseInt(facebook_time), "SOCIAL MEDIA");
                         String class_ = jsonObject.getString("class");
                         String year = jsonObject.getString("year_group");
-                        String school_name_json = jsonObject.getString("school_name");
 //                        LinearLayout parent = new LinearLayout(getContext());
-                        createCard(linearLayout, i+1, first_name_json+" "+last_name_json, Integer.parseInt(screen_time_minutes_json), school_name_json.toUpperCase());
+//                        createCard(linearLayout, i+1, first_name_json+" "+last_name_json, Integer.parseInt(screen_time_minutes_json), class_+" (YEAR "+year+")");
 //                        int pixels = (int) (40 * getContext().getResources().getDisplayMetrics().density);
 //                        parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, pixels));
 //                        parent.setOrientation(LinearLayout.HORIZONTAL);
@@ -392,7 +418,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
                     } catch (JSONException e) {
                         e.printStackTrace();
 FirebaseCrashlytics.getInstance().recordException(e);
-                        Snackbar.make(view.findViewById(R.id.enter_school_relative_layout), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view.findViewById(R.id.fragment_self_daily_parent), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -417,19 +443,44 @@ FirebaseCrashlytics.getInstance().recordException(e);
         mainLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
         cardView.addView(mainLinearLayout);
         // Create position TextView
-        TextView positionText = new TextView(getContext());
+        ImageView positionText = new ImageView(getContext());
         LinearLayout.LayoutParams positionTextLayoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
-//        positionTextLayoutParams.gravity = Gravity.CENTER;
-        positionText.setGravity(Gravity.CENTER);
-        positionTextLayoutParams.weight = 0.2f;
+        positionTextLayoutParams.gravity = Gravity.CENTER;
+//        positionText.setGravity(Gravity.CENTER);
+        positionTextLayoutParams.weight = 0.3f;
         positionText.setLayoutParams(positionTextLayoutParams);
 //        positionText.setTypeface(ResourcesCompat.getFont(getContext(), R.font.fredoka_one));
         positionText.setPadding(0, getDP(20), 0, getDP(20));
-        positionText.setText(position.toString());
-        positionText.setTextColor(getResources().getColor(R.color.blue));
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(positionText, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            positionText.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+//        positionText.setText(position.toString());
+//        positionText.setTextColor(getResources().getColor(R.color.blue));
+//        TextViewCompat.setAutoSizeTextTypeWithDefaults(positionText, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            positionText.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+//        }
+        switch (name) {
+            case "SNAPCHAT":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.snapchat_logo));
+                break;
+            case "INSTAGRAM":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.instagram_icon));
+                positionText.setPadding(0, getDP(12), 0, getDP(12));
+                break;
+            case "YOUTUBE":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.youtube_icon));
+                positionText.setPadding(0, getDP(25), 0, getDP(25));
+                break;
+            case "WHATSAPP":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.whatsapp_icon));
+                positionText.setPadding(0, getDP(13), 0, getDP(13));
+                break;
+            case "TWITTER":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.twitter_logo));
+                break;
+            case "TIKTOK":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.tiktok_icon));
+                break;
+            case "FACEBOOK":
+                positionText.setImageDrawable(getResources().getDrawable(R.drawable.facebook_logo));
         }
         mainLinearLayout.addView(positionText);
         // Create name and class LinearLayout
@@ -471,7 +522,7 @@ FirebaseCrashlytics.getInstance().recordException(e);
         // Create points TextView
         TextView pointsText = new TextView(getContext());
         LinearLayout.LayoutParams pointsTextLayoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        pointsTextLayoutParams.gravity = Gravity.CENTER;
+        pointsTextLayoutParams.gravity = Gravity.CENTER;
         pointsTextLayoutParams.weight = 0.3f;
         pointsText.setGravity(Gravity.CENTER);
 //        pointsText.setTypeface(ResourcesCompat.getFont(getContext(), R.font.fredoka_one));

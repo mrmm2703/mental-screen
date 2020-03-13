@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +50,7 @@ public class SignUpClass extends AppCompatActivity {
     String class_;
     EditText year_entry;
     String solo = "0";
+    Button create_class_button;
     List<String> spinner_choices = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class SignUpClass extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_sign_up_class);
+        create_class_button = findViewById(R.id.sign_up_class_create_class_btn);
         classcode_text = findViewById(R.id.sign_up_class_classcode_text);
         class_code = findViewById(R.id.sign_up_class_classcode);
         solo_switch = findViewById(R.id.sign_up_class_solo_switch);
@@ -65,10 +69,12 @@ public class SignUpClass extends AppCompatActivity {
                     solo = "1";
                     classcode_text.setVisibility(View.GONE);
                     class_code.setVisibility(View.GONE);
+                    create_class_button.setVisibility(View.GONE);
                 } else {
                     solo = "0";
                     classcode_text.setVisibility(View.VISIBLE);
                     class_code.setVisibility(View.VISIBLE);
+                    create_class_button.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -148,8 +154,10 @@ public class SignUpClass extends AppCompatActivity {
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } catch (IOException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -160,6 +168,7 @@ public class SignUpClass extends AppCompatActivity {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
             return null;
@@ -170,7 +179,7 @@ public class SignUpClass extends AppCompatActivity {
             super.onPostExecute(result);
             Log.d("TTT", result);
             if (result.equals("No classes found, contact admin\n")) {
-                 Snackbar.make(findViewById(R.id.sign_up_class_relative_layout), "Class code entered is invalid.", Snackbar.LENGTH_SHORT).show();
+                 Snackbar.make(findViewById(R.id.sign_up_class_relative_layout), "Passcode entered is invalid.", Snackbar.LENGTH_SHORT).show();
                 if (pd.isShowing()) {
                     pd.dismiss();
                 }
@@ -202,10 +211,12 @@ public class SignUpClass extends AppCompatActivity {
                             SignUpClass.this.startActivity(myIntent);
                         } catch (JSONException e) {
                             e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                         }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                     Snackbar.make(findViewById(R.id.sign_up_class_relative_layout), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
                     if (pd.isShowing()) {
                         pd.dismiss();

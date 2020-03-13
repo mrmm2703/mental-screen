@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -105,8 +106,10 @@ public class SignUpCreateClass extends AppCompatActivity {
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } catch (IOException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -117,6 +120,7 @@ public class SignUpCreateClass extends AppCompatActivity {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
             return null;

@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,8 +108,10 @@ public class FragmentClassWeekly extends Fragment {
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } catch (IOException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -119,6 +122,7 @@ public class FragmentClassWeekly extends Fragment {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
             return null;
@@ -172,6 +176,7 @@ public class FragmentClassWeekly extends Fragment {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                         Snackbar.make(view.findViewById(R.id.fragment_class_weekly_parent), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
                     }
                 }

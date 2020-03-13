@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.work.WorkManager;
 
 import com.morahman.mentalscreen.EnterSchool;
 import com.morahman.mentalscreen.LandingPage;
@@ -31,6 +32,7 @@ public class SendFragment extends Fragment {
         PushNotifications.clearDeviceInterests();
         getActivity().startActivity(new Intent(getActivity(), LandingPage.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 ViewModelProviders.of(this).get(SendViewModel.class);
+        WorkManager.getInstance().cancelAllWorkByTag("logTimes");
         View root = inflater.inflate(R.layout.fragment_send, container, false);
 //        final TextView textView = root.findViewById(R.id.text_send);
 //        sendViewModel.getText().observe(this, new Observer<String>() {

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,8 +98,10 @@ public class EnterPassword extends AppCompatActivity {
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } catch (IOException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -109,6 +112,7 @@ public class EnterPassword extends AppCompatActivity {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
             return null;
@@ -135,6 +139,7 @@ public class EnterPassword extends AppCompatActivity {
                 json = new JSONArray(result);
             } catch (JSONException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                 Snackbar.make(findViewById(R.id.enter_password_relative_layout), "Error 2: Couldn't create JSONArray", Snackbar.LENGTH_SHORT).show();
                 if (pd.isShowing()) {
                     pd.dismiss();

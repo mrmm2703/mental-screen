@@ -18,6 +18,7 @@ import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -191,8 +192,10 @@ public class FragmentYearMonthly extends Fragment {
                 return buffer.toString();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } catch (IOException e) {
                 e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -203,6 +206,7 @@ public class FragmentYearMonthly extends Fragment {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
             return null;
@@ -256,6 +260,7 @@ public class FragmentYearMonthly extends Fragment {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+FirebaseCrashlytics.getInstance().recordException(e);
                         Snackbar.make(view.findViewById(R.id.fragment_year_monthly_parent), "Error 3: Couldn't parse JSON data", Snackbar.LENGTH_SHORT).show();
                     }
                 }

@@ -20,21 +20,28 @@
 <!--            android:icon="@drawable/ic_menu_manage"-->
 <!--            android:title="@string/menu_tools" />-->
 <!--    </group>-->
-
-    <item android:title="LEADERBOARDS">
+    <item android:title="ME">
         <menu>
             <item
                 android:id="@+id/nav_self"
                 android:icon="@drawable/menu_myself"
-                android:title="MYSELF" />
+                android:title="MY USAGE" />
+            <item
+                android:id="@+id/nav_prizes"
+                android:icon="@drawable/menu_prizes"
+                android:title="COMPETITIONS" />
+        </menu>
+    </item>
+    <item android:title="LEADERBOARDS">
+        <menu>
             <item
                 android:id="@+id/nav_home"
                 android:icon="@drawable/menu_class"
-                android:title="TEAM" />
+                android:title="MY TEAM" />
             <item
                 android:id="@+id/nav_gallery"
                 android:icon="@drawable/menu_year"
-                android:title="YEAR" />
+                android:title="YEAR GROUP" />
             <item
                 android:id="@+id/nav_slideshow"
                 android:icon="@drawable/menu_school"
